@@ -75,6 +75,77 @@ export default {
       console.log('-->this.tableData.currentPage:' + this.tableData.currentPage)
       this.fetchData()
     }
+    /**
+     * ----------------------Axios发送post请求下载文件------------------------------------
+     * 后台使用hutool工具创建的excel的writer，默认为xls格式：
+     * @PostMapping("/hit/excelExport")
+		  public void excelExport(HttpServletResponse httpServletResponse,WeSensitiveHitQuery query) throws IOException {
+        List<IndexAudit> resultList = new ArrayList<IndexAudit>();
+			resultList = weSensitiveService.getHitSensitivePageInfo(query).getList();
+			//通过hutool工具创建的excel的writer，默认为xls格式
+			ExcelWriter writer = ExcelUtil.getWriter();
+			//自定义excel标题和列名
+			writer.addHeaderAlias("froms","发送人");
+			writer.addHeaderAlias("tolist","接收人");
+			writer.addHeaderAlias("msgData","内容");
+			writer.addHeaderAlias("msgDate","发送时间");
+			writer.setColumnWidth(0,0);
+			writer.setColumnWidth(1,15);
+			writer.setColumnWidth(2,40);
+			writer.setColumnWidth(3,120);
+			writer.setColumnWidth(4,30);
+			// 合并单元格后的标题行，使用默认标题样式
+			// writer.merge(3,"会话检索信息");
+			writer.renameSheet(0,"企业微信会话");
+			//一次性写出内容，使用默认样式，强制输出标题
+			writer.write(resultList,true);
+
+			httpServletResponse.setContentType("application/vnd.ms-excel;charset=utf-8");
+			//name是下载对话框的名称，不支持中文，想用中文名称需要进行utf8编码
+			String excelName = "excelExport";
+			excelName = new String(excelName.getBytes(),"utf-8");
+			httpServletResponse.setHeader("Content-Disposition", "attachment;filename=" + excelName +".xls");
+
+			//将excel文件信息写入输出流，返回给调用者
+			ServletOutputStream excelOut = null;
+			try {
+			excelOut = httpServletResponse.getOutputStream();
+			writer.flush(excelOut,true);
+			} catch (IOException e) {
+			e.printStackTrace();
+			}finally {
+			writer.close();
+			}
+			IoUtil.close(excelOut);
+		}
+    -----------------------------------------------------------
+
+    exportData() {
+      const form = this.getSearchForm() // 要发送到后台的数据
+      axios({ // 用axios发送post请求
+        method: 'post',
+        url: '/user/12345', // 请求地址
+        data: form, // 参数
+        responseType: 'blob' // 表明返回服务器返回的数据类型
+      }).then((res) => { // 处理返回的文件流
+        const content = res
+        const blob = new Blob([content])
+        const fileName = '测试表格123.xls'
+        if ('download' in document.createElement('a')) { // 非IE下载
+          const elink = document.createElement('a')
+          elink.download = fileName
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href) // 释放URL 对象
+          document.body.removeChild(elink)
+        } else { // IE10+下载
+          navigator.msSaveBlob(blob, fileName)
+        }
+      })
+    }
+    */
   }
 }
 </script>
