@@ -22,8 +22,7 @@
     <!-- footer -->
     <footer v-show="todos.length" class="footer">
       <span class="todo-count">
-        <strong>{{ remaining }}</strong>
-        {{ remaining | pluralize('item') }} left
+        <strong>待办 {{ remaining }}</strong>
       </span>
       <ul class="filters">
         <li v-for="(val, key) in filters" :key="key">
@@ -47,20 +46,22 @@ const filters = {
   completed: todos => todos.filter(todo => todo.done)
 }
 const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
   { text: 'follow author', done: false },
-  { text: 'vue-element-admin', done: true },
-  { text: 'vue', done: true },
-  { text: 'element-ui', done: true },
-  { text: 'axios', done: true },
-  { text: 'webpack', done: true }
+  { text: 'vue-element-admin', done: false },
+  { text: 'vue', done: false },
+  { text: 'element-ui', done: false },
+  { text: 'axios', done: false },
+  { text: 'webpack', done: false },
+  { text: '前端框架搭建', done: true },
+  { text: '前端框架搭建', done: true },
+  { text: '移动端框架搭建', done: true }
 ]
 export default {
   components: { Todo },
   filters: {
     pluralize: (n, w) => n === 1 ? w : w + 's',
-    capitalize: s => s.charAt(0).toUpperCase() + s.slice(1)
+    // capitalize: s => s.charAt(0).toUpperCase() + s.slice(1)
+    capitalize: s => s === 'all' ? '全部' : (s === 'active' ? '待办' : '完成')
   },
   data() {
     return {

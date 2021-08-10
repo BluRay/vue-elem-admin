@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <el-card class="box-card" style="{padding: 1px}">
-        <vxe-button size="mini" @click="showModel = true">基本窗口</vxe-button>
+        <vxe-button size="mini" @click="showModel = true">功能</vxe-button>
       </el-card>
     </el-header>
     <el-main style="padding: 20px 20px 0px 20px;">
@@ -34,7 +34,7 @@
     </el-main>
     <vxe-modal v-model="showModel" size="mini" width="600" show-footer>
       <template #default>
-        <p>aaa</p>
+        <p>Axios发送post请求下载文件</p>
       </template>
     </vxe-modal>
   </el-container>
