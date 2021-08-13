@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <el-card class="box-card" style="{padding: 1px}">
+      <el-card class="box-card" style="padding: 1px">
         <vxe-button size="mini" @click="showModel = true">功能</vxe-button>
       </el-card>
     </el-header>
@@ -80,8 +80,17 @@ export default {
      * 后台使用hutool工具创建的excel的writer，默认为xls格式：
      * @PostMapping("/hit/excelExport")
 		  public void excelExport(HttpServletResponse httpServletResponse,WeSensitiveHitQuery query) throws IOException {
-        List<IndexAudit> resultList = new ArrayList<IndexAudit>();
-			resultList = weSensitiveService.getHitSensitivePageInfo(query).getList();
+      PageInfo<IndexAudit> pageResult = weSensitiveService.getHitSensitivePageInfo(query);
+			List<IndexAudit> resultList = new ArrayList<IndexAudit>();
+			resultList = pageResult.getList();
+      Long total = pageResult.getTotal();
+      System.out.println("-->total : " + total);
+      if (total > 10000) {
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setHeader("Content-Type", "application/json");
+        httpServletResponse.getWriter().write("{\"code\":-1,\"msg\":\"over 10000\"}");
+        return;
+      }
 			//通过hutool工具创建的excel的writer，默认为xls格式
 			ExcelWriter writer = ExcelUtil.getWriter();
 			//自定义excel标题和列名
