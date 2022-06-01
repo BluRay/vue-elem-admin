@@ -2,7 +2,8 @@
   <el-container>
     <el-header>
       <el-card class="box-card" style="padding: 1px">
-        <vxe-button size="mini" @click="showModel = true">功能</vxe-button>
+        <vxe-button size="mini" @click="showModel = true">Model功能</vxe-button>
+        <vxe-button size="mini" @click="exportDataEvent">导出Excel功能</vxe-button>
       </el-card>
     </el-header>
     <el-main style="padding: 20px 20px 0px 20px;">
@@ -74,6 +75,14 @@ export default {
       this.tableData.pageSize = pageSize
       console.log('-->this.tableData.currentPage:' + this.tableData.currentPage)
       this.fetchData()
+    },
+    exportDataEvent() {
+      this.$refs.xTable.exportData({
+        type: 'xlsx',
+        filename: '用户名册',
+        sheetName: 'Sheet1',
+        isMerge: true
+      })
     }
     /**
      * ----------------------Axios发送post请求下载文件------------------------------------
