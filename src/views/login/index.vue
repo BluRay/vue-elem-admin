@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">Welcome</h3>
       </div>
 
       <el-form-item prop="username">
@@ -45,7 +45,7 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading="loading" type="primary" size="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -150,7 +150,7 @@ export default {
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
+          console.log('登录失败!')
           return false
         }
       })
