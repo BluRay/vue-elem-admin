@@ -73,28 +73,65 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    name: '首页',
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
+      },
     ]
   },
   {
-    path: '/documentation',
+    path: '/datacenter',
     component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '数据中心',
+      icon: 'el-icon-s-help'
+    },
     children: [
       {
-        path: 'index',
+        path: 'account',
         component: () => import('@/views/documentation/index'),
         name: 'Documentation',
-        meta: { title: '功能测试', icon: 'documentation', affix: false }
+        meta: { title: '交易帐户', icon: 'documentation', affix: false }
+      },
+      {
+        path: 'tradedetail',
+        component: () => import('@/views/documentation/tradedetail'),
+        name: 'Documentation',
+        meta: { title: '交易明细', icon: 'documentation', affix: false }
       }
-    ]
+     ]
   },
+  {
+    path: '/config',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '系统设置',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'account',
+        component: () => import('@/views/documentation/tradedetail'),
+        name: 'Documentation',
+        meta: { title: '用户管理', icon: 'documentation', affix: false }
+      },
+      {
+        path: 'tradedetail',
+        component: () => import('@/views/documentation/tradedetail'),
+        name: 'Documentation',
+        meta: { title: '权限管理', icon: 'documentation', affix: false }
+      }
+     ]
+  },
+  /**,
   {
     path: '/guide',
     component: Layout,
@@ -121,7 +158,7 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
-  }
+  } **/
 ]
 
 /**
@@ -129,7 +166,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
+  /** {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
@@ -182,9 +219,10 @@ export const asyncRoutes = [
         meta: { title: 'Icons', icon: 'icon', noCache: true }
       }
     ]
-  },
+  },**/
 
   /** when your routing map is too long, you can split it into small modules **/
+  /**
   componentsRouter,
   chartsRouter,
   nestedRouter,
@@ -381,7 +419,7 @@ export const asyncRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
-  },
+  }, **/
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

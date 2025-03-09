@@ -15,3 +15,17 @@ export function transactionList(data) {
     data
   })
 }
+export function getAccountPageList(data) {
+  return request({
+    url: '/futures/getAccountPageList',
+    method: 'POST',
+    data
+  })
+}
+export function uploadAccount(data) {
+  return request({
+    url: '/futures/uploadAccount',
+    method: 'POST',
+    data
+  })
+}
