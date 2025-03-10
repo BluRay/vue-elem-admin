@@ -25,8 +25,8 @@ import VxeUIAll from 'vxe-pc-ui'
 import 'vxe-pc-ui/lib/style.css'
 import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
-//import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
-//VXETable.use(VXETablePluginExportXLSX)
+// import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
+// VXETable.use(VXETablePluginExportXLSX)
 
 Vue.use(VxeUIAll)
 Vue.use(VxeUITable)

@@ -80,7 +80,7 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: '首页', icon: 'dashboard', affix: true }
-      },
+      }
     ]
   },
   {
@@ -103,9 +103,9 @@ export const constantRoutes = [
         path: 'tradedetail',
         component: () => import('@/views/documentation/tradedetail'),
         name: 'Documentation',
-        meta: { title: '交易明细', icon: 'documentation', affix: false }
+        meta: { title: '数据报表', icon: 'documentation', affix: false }
       }
-     ]
+    ]
   },
   {
     path: '/config',
@@ -129,20 +129,6 @@ export const constantRoutes = [
         name: 'Documentation',
         meta: { title: '权限管理', icon: 'documentation', affix: false }
       }
-     ]
-  },
-  /**,
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
     ]
   },
   {
@@ -155,10 +141,24 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        meta: { title: '个人信息', icon: 'user', noCache: true }
       }
     ]
-  } **/
+  } 
+  /** ,
+  {
+    path: '/guide',
+    component: Layout,
+    redirect: '/guide/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/guide/index'),
+        name: 'Guide',
+        meta: { title: 'Guide', icon: 'guide', noCache: true }
+      }
+    ]
+  }**/
 ]
 
 /**

@@ -1,26 +1,28 @@
 <template>
   <el-container>
-    <el-header>
-    	<h3>待上线...{{$store.state.name}}</h3>
-      	<!--vxe-form refs="grid_form">
-      		<vxe-form-item title="关键字:" titleWidth="80px">
-            <template #default>
-              <vxe-input v-model="searchForm.keyword"
-                clearable
-                size="mini"
-                placeholder="请输入交易账户/名称/资金账户"
-                style="width: 250px;"
-                class="filter-item"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item>
-        		<vxe-button size="mini" status='success' @click="fetchData()">查询</vxe-button>
-          </vxe-form-item>
-      	</vxe-form --> &nbsp;&nbsp;
-    </el-header>
     <el-main style="padding: 20px 20px 0px 20px;">
-      
+    	
+		<el-row>
+		  <el-col :span="4"><el-card :height="tableheight" class="box-card"><div class="grid-content bg-purple">
+		  
+      <el-tree
+			  :props="props"
+			  :load="loadNode"
+			  node-key="name"
+			  :default-expanded-keys="['用户组1']"
+			  lazy
+			  show-checkbox>
+			</el-tree>
+			
+		  </div></el-card></el-col>
+		  <el-col :span="20">
+		  <el-card>
+		  <div id="ccc" :class="className" :style="{height:height,width:width}" />
+		  <line-chart :chart-data="lineChartData" />
+		  </div>
+		  </el-card>
+		  </el-col>
+		</el-row>
     </el-main>
     <vxe-modal title="导入交易帐号" v-model="showModel" size="mini" width="500" show-footer>
       <template #default>
@@ -33,23 +35,38 @@
 
 <script>
 import Papa from 'papaparse'
+import LineChart from './components/LineChart'
 import { getAccountPageList, uploadAccount } from '@/api/remote-search'
+const lineChartData = {
+  newVisitis: {
+    expectedData: [100, 120, 161, 134, 105, 160, 165],
+    actualData: [120, 82, 91, 154, 162, 140, 145]
+  }
+}
 export default {
   name: 'Documentation',
+  components: {
+    LineChart
+   },
   data() {
     return {
+    	props: {
+        label: 'name',
+        children: 'zones'
+      },
     	searchForm: { keyword: '', date: '' },
+    	lineChartData: lineChartData.newVisitis,
       showModel: false,
       loading: false,
       tableheight: '500px',
 	    pageSizes: [100, 500, 1000, 5000],
       tableData: {pageIndex:1, pageSize: 500, totalCount: 0}
-    }
+  	}
   },
   created() {
     this.tableheight = (document.body.clientHeight - 220) + 'px'
-    this.fetchData()
     console.log('-->name:' + this.$store.state.user.name)
+    this.lineChartData = lineChartData.newVisitis
   },
   methods: {
     fetchData() {
@@ -114,11 +131,42 @@ export default {
         sheetName: 'Sheet1',
         isMerge: true
       })
-    }
+    },
+    handleSetLineChartData(type) {
+      this.lineChartData = lineChartData[type]
+    },
+    loadNode(node, resolve) {
+        if (node.level === 0) {
+          return resolve([{ name: '用户组1' }]);
+        }
+        if (node.level > 3) return resolve([]);
+        var hasChild;
+        if (node.data.name === '用户组1') {
+          hasChild = true;
+        } else {
+          hasChild = false;
+        }
+
+        setTimeout(() => {
+          var data;
+          if (hasChild) {
+            data = [{name: 'AAA'}, {name: 'BBB'}, {name: 'CCC'}];
+          } else {
+            data = [];
+          }
+          resolve(data);
+        }, 500);
+      }
     
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css">
+.el-card{
+  height: 100%;
+}
+.grid-content{
+  height: 100%;
+}
 </style>

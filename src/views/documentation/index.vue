@@ -1,37 +1,39 @@
 <template>
   <el-container>
     <el-header>
-      	<vxe-form refs="grid_form">
-      		<vxe-form-item title="关键字:" titleWidth="80px">
-            <template #default>
-              <vxe-input v-model="searchForm.keyword"
-                clearable
-                size="mini"
-                placeholder="请输入交易账户/名称/资金账户"
-                style="width: 250px;"
-                class="filter-item"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item title="数据日期:" titleWidth="80px">
-            <template #default>
-              <vxe-input v-model="searchForm.date"
-                type="date"
-                value-format="yyyyMMdd"
-                label-format="yyyyMMdd"
-                clearable
-                size="mini"
-                placeholder="数据日期"
-                style="width: 120px;"
-                class="filter-item"
-              ></vxe-input>
-            </template>
-          </vxe-form-item>
-          <vxe-form-item>
-        		<vxe-button size="mini" status='success' @click="fetchData()">查询交易账号</vxe-button>
-        		<vxe-button size="mini" status='warning' @click="showModel = true">导入交易账号</vxe-button>
-          </vxe-form-item>
-      	</vxe-form> &nbsp;&nbsp;
+      <vxe-form refs="grid_form">
+        <vxe-form-item title="关键字:" title-width="80px">
+          <template #default>
+            <vxe-input
+              v-model="searchForm.keyword"
+              clearable
+              size="mini"
+              placeholder="请输入交易账户/名称/资金账户"
+              style="width: 250px;"
+              class="filter-item"
+            />
+          </template>
+        </vxe-form-item>
+        <vxe-form-item title="数据日期:" title-width="80px">
+          <template #default>
+            <vxe-input
+              v-model="searchForm.date"
+              type="date"
+              value-format="yyyyMMdd"
+              label-format="yyyyMMdd"
+              clearable
+              size="mini"
+              placeholder="数据日期"
+              style="width: 120px;"
+              class="filter-item"
+            />
+          </template>
+        </vxe-form-item>
+        <vxe-form-item>
+          <vxe-button size="mini" status="success" @click="fetchData()">查询交易账号</vxe-button>
+          <vxe-button size="mini" status="warning" @click="showModel = true">导入交易账号</vxe-button>
+        </vxe-form-item>
+      </vxe-form> &nbsp;&nbsp;
     </el-header>
     <el-main style="padding: 20px 20px 0px 20px;">
       <vxe-table
@@ -81,9 +83,9 @@
         @page-change="handlePageChange"
       />
     </el-main>
-    <vxe-modal title="导入交易帐号" v-model="showModel" size="mini" width="500" show-footer>
+    <vxe-modal v-model="showModel" title="导入交易帐号" size="mini" width="500" show-footer>
       <template #default>
-        <input type="file" id="files" ref="refFile" v-on:change="importCsv">
+        <input id="files" ref="refFile" type="file" @change="importCsv">
         <p>导入csv文件标题格式为[交易账户_日期.csv] 如:交易账户_20251018.csv</p>
       </template>
     </vxe-modal>
@@ -102,7 +104,7 @@ export default {
       loading: false,
       tableheight: '500px',
 	    pageSizes: [100, 500, 1000, 5000],
-      tableData: {pageIndex:1, pageSize: 500, totalCount: 0}
+      tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 }
     }
   },
   created() {
@@ -130,31 +132,31 @@ export default {
       console.log('-->this.tableData.currentPage:' + this.tableData.currentPage)
       this.fetchData()
     },
-		importCsv(){
-			let selectedFile = null
-			selectedFile = this.$refs.refFile.files[0];
-			if(selectedFile.name.indexOf('交易账户_') !== 0 || selectedFile.name.indexOf('.csv') < 0) {
-				this.$message({ message: '导入的文件格式不正确!', type: 'error' })
-				return false
-			}
-			if (selectedFile === undefined){
+    importCsv() {
+      let selectedFile = null
+      selectedFile = this.$refs.refFile.files[0]
+      if (selectedFile.name.indexOf('交易账户_') !== 0 || selectedFile.name.indexOf('.csv') < 0) {
+        this.$message({ message: '导入的文件格式不正确!', type: 'error' })
+        return false
+      }
+      if (selectedFile === undefined) {
 			  return
-			}
-			var account_date = selectedFile.name.substring(5, 13)
-			var reader = new FileReader();
-			reader.readAsDataURL(selectedFile);
-			reader.onload = evt => {
+      }
+      var account_date = selectedFile.name.substring(5, 13)
+      var reader = new FileReader()
+      reader.readAsDataURL(selectedFile)
+      reader.onload = evt => {
 			  Papa.parse(selectedFile, {
 			    encoding: 'gb2312',
 			    complete: res => {
-			      let data = res.data;
-			      if (data[data.length - 1] == "") {
-			        //去除最后的空行
-			        data.pop();
+			      const data = res.data
+			      if (data[data.length - 1] == '') {
+			        // 去除最后的空行
+			        data.pop()
 			      }
-			      console.log(data);  // data就是文件里面的数据
+			      console.log(data) // data就是文件里面的数据
 			      uploadAccount({ upload_data: data, account_date: account_date, user_name: this.$store.state.user.name }).then(response => {
-			      	if(response.data.code === -1) {
+			      	if (response.data.code === -1) {
 			      		this.$message({ message: account_date + '的数据已经导入!', type: 'error' })
 			      	} else {
 					      this.$message({ message: '导入成功!', type: 'success' })
@@ -163,9 +165,9 @@ export default {
 					    }
 				    })
 			    }
-			  });
-			};
-		},
+			  })
+      }
+    },
     exportDataEvent() {
       this.$refs.xTable.exportData({
         type: 'xlsx',
