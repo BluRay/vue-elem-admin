@@ -29,3 +29,10 @@ export function uploadAccount(data) {
     data
   })
 }
+export function getAccountLineChart(data) {
+  return request({
+    url: '/futures/getAccountLineChart',
+    method: 'POST',
+    data
+  })
+}

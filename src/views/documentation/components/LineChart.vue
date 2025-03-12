@@ -61,10 +61,23 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ xdata, series, account } = {}) {
       this.chart.setOption({
+      	
+title:{
+    show:true,
+    text:"持仓盈亏",
+    textStyle:{
+        color:'blue',//'red'
+        fontStyle:'normal',//'italic'() | 'oblique'() 
+        fontWeight:'normal',//'bold'() | 'bolder'() | 'lighter'() 
+        fontFamily:'Microsoft YaHei',//'sans-serif' | 'serif' | 'monospace' | 'Arial' | 'Courier New' 
+        fontSize:18,//
+        lineHeight:18,//
+      }
+     },
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: xdata,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -90,44 +103,9 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: account
         },
-        series: [{
-          name: 'expected', itemStyle: {
-            normal: {
-              color: '#FF005A',
-              lineStyle: {
-                color: '#FF005A',
-                width: 2
-              }
-            }
-          },
-          smooth: false,
-          type: 'line',
-          data: expectedData,
-          animationDuration: 2800,
-          animationEasing: 'cubicInOut'
-        },
-        {
-          name: 'actual',
-          smooth: false,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+        series: series
       })
     }
   }

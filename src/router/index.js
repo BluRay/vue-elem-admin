@@ -144,7 +144,7 @@ export const constantRoutes = [
         meta: { title: '个人信息', icon: 'user', noCache: true }
       }
     ]
-  } 
+  }
   /** ,
   {
     path: '/guide',
