@@ -120,11 +120,11 @@ export default {
       this.loading = true
       this.xdata = []
       getAccountLineChart({}).then(response => {
-      	this.total_lineData = response.data.lineData
-      	response.data.lineData.forEach(d => {
+      	this.total_lineData = response.data.result.data.lineData
+      	response.data.result.data.lineData.forEach(d => {
       		this.treedata.push({id:d.id, name: d['名称']})
       	})
-      	response.data.dateList.forEach(d => {
+      	response.data.result.data.dateList.forEach(d => {
       		this.xdata.push(d['数据日期'].substring(4))
       	})
       	this.xdata.reverse()

@@ -108,6 +108,30 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/tradconf',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '交易系统配置',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'trade_account',
+        component: () => import('@/views/documentation/trade_account'),
+        name: 'Documentation',
+        meta: { title: '交易帐户配置', icon: 'documentation', affix: false }
+      },
+      {
+        path: 'trade_books',
+        component: () => import('@/views/documentation/trade_books'),
+        name: 'Documentation',
+        meta: { title: '交易品种配置', icon: 'documentation', affix: false }
+      }
+    ]
+  },
+  {
     path: '/config',
     component: Layout,
     redirect: '/example/list',
