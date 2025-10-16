@@ -36,3 +36,17 @@ export function getAccountLineChart(data) {
     data
   })
 }
+export function getRqTradeBooksData(data) {
+  return request({
+    url: '/futures/getRqTradeBooksData',
+    method: 'POST',
+    data
+  })
+}
+export function getRqTradeAccountData(data) {
+  return request({
+    url: '/futures/getRqTradeAccountData',
+    method: 'POST',
+    data
+  })
+}

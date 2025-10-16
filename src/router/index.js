@@ -97,13 +97,13 @@ export const constantRoutes = [
         path: 'account',
         component: () => import('@/views/documentation/index'),
         name: 'Documentation',
-        meta: { title: '交易帐户', icon: 'documentation', affix: false }
+        meta: { title: '交易帐户', icon: 'el-icon-user', affix: false }
       },
       {
         path: 'tradedetail',
         component: () => import('@/views/documentation/tradedetail'),
         name: 'Documentation',
-        meta: { title: '数据报表', icon: 'documentation', affix: false }
+        meta: { title: '数据报表', icon: 'el-icon-s-data', affix: false }
       }
     ]
   },
@@ -113,21 +113,27 @@ export const constantRoutes = [
     redirect: '/example/list',
     name: 'Example',
     meta: {
-      title: '交易系统配置',
+      title: '交易系统',
       icon: 'el-icon-s-help'
     },
     children: [
       {
+        path: 'trade_main',
+        component: () => import('@/views/documentation/trade_main'),
+        name: 'Documentation',
+        meta: { title: '交易主界面', icon: 'el-icon-s-marketing', affix: false }
+      },
+      {
         path: 'trade_account',
         component: () => import('@/views/documentation/trade_account'),
         name: 'Documentation',
-        meta: { title: '交易帐户配置', icon: 'documentation', affix: false }
+        meta: { title: '交易帐户配置', icon: 'el-icon-s-custom', affix: false }
       },
       {
         path: 'trade_books',
         component: () => import('@/views/documentation/trade_books'),
         name: 'Documentation',
-        meta: { title: '交易品种配置', icon: 'documentation', affix: false }
+        meta: { title: '交易品种配置', icon: 'el-icon-s-goods', affix: false }
       }
     ]
   },
@@ -145,13 +151,13 @@ export const constantRoutes = [
         path: 'account',
         component: () => import('@/views/documentation/tradedetail'),
         name: 'Documentation',
-        meta: { title: '用户管理', icon: 'documentation', affix: false }
+        meta: { title: '用户管理', icon: 'el-icon-s-tools', affix: false }
       },
       {
         path: 'tradedetail',
         component: () => import('@/views/documentation/tradedetail'),
         name: 'Documentation',
-        meta: { title: '权限管理', icon: 'documentation', affix: false }
+        meta: { title: '权限管理', icon: 'el-icon-s-tools', affix: false }
       }
     ]
   },

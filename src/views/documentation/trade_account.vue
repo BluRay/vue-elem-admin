@@ -96,7 +96,7 @@
 import Papa from 'papaparse'
 import { getAccountPageList, uploadAccount } from '@/api/remote-search'
 export default {
-  name: 'Trad_account',
+  name: 'TradAccount',
   data() {
     return {
     	searchForm: { keyword: '', date: '' },

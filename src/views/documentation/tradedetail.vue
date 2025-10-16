@@ -5,14 +5,15 @@
       <el-row>
         <el-col :span="4"><el-card :height="tableheight" class="box-card"><div class="grid-content bg-purple">
 
-        <el-tree ref="tree"
-				  :props="props"
-				  :load="loadNode"
-				  @check="chaneuser"
-				  node-key="id"
-				  lazy
-				  show-checkbox>
-				</el-tree>
+          <el-tree
+            ref="tree"
+            :props="props"
+            :load="loadNode"
+            node-key="id"
+            lazy
+            show-checkbox
+            @check="chaneuser"
+          />
 
         </div></el-card></el-col>
         <el-col :span="20">
@@ -54,16 +55,16 @@ export default {
       exptreenode: ['请选择帐户'],
       treedata: [],
       defaultProps: {
-          children: 'children',
-          label: 'label'
-        },
+        children: 'children',
+        label: 'label'
+      },
     	searchForm: { keyword: '', date: '' },
     	xdata: [],
     	total_lineData: [],
     	lineChartData2: {
-    xdata: [],
-    account: [],
-    series: [{
+        xdata: [],
+        account: [],
+        series: [{
           name: '吴晓康', itemStyle: {
             normal: {
               color: '#FF005A',
@@ -99,11 +100,11 @@ export default {
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]
-  },lineChartData: {
-    xdata: [],
-    account: [],
-    series: []
-  },
+      }, lineChartData: {
+        xdata: [],
+        account: [],
+        series: []
+      },
       showModel: false,
       loading: false,
       tableheight: '500px',
@@ -113,7 +114,7 @@ export default {
   },
   created() {
     this.fetchData()
-    //this.lineChartData = lineChartData.newVisitis
+    // this.lineChartData = lineChartData.newVisitis
   },
   methods: {
     fetchData() {
@@ -122,7 +123,7 @@ export default {
       getAccountLineChart({}).then(response => {
       	this.total_lineData = response.data.result.data.lineData
       	response.data.result.data.lineData.forEach(d => {
-      		this.treedata.push({id:d.id, name: d['名称']})
+      		this.treedata.push({ id: d.id, name: d['名称'] })
       	})
       	response.data.result.data.dateList.forEach(d => {
       		this.xdata.push(d['数据日期'].substring(4))
@@ -133,15 +134,15 @@ export default {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     },
-    chaneuser(){
+    chaneuser() {
     	console.log('-->chaneuser', this.$refs.tree.getCheckedNodes())
     	this.lineChartData.account = []
     	this.lineChartData.series = []
     	this.$refs.tree.getCheckedNodes().forEach(d => {
     		this.lineChartData.account.push(d.name)
-    		let rlist = []
+    		const rlist = []
     		this.total_lineData.forEach(s => {
-    			if(s['名称'] === d.name) {
+    			if (s['名称'] === d.name) {
     				this.xdata.forEach(x => {
     					rlist.push(s['2025' + x])
     				})
@@ -156,9 +157,9 @@ export default {
           animationEasing: 'cubicInOut'
     		})
     	})
-    	
-    	/**this.lineChartData.series = [{
-          name: '吴晓康', 
+
+    	/** this.lineChartData.series = [{
+          name: '吴晓康',
           smooth: false,
           type: 'line',
           data: [100, 120, 161, 134, 105, 160, 165],
@@ -175,13 +176,13 @@ export default {
         }]**/
     	this.lineChartData.xdata = this.xdata
     },
-		loadNode(node, resolve) {
-        if (node.level === 0) {
-          return resolve([{id: 999, name: '请选择帐户', disabled: true }]);
-        }
-        if (node.level > 1) return resolve([]);
-        resolve(this.treedata);
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        return resolve([{ id: 999, name: '请选择帐户', disabled: true }])
       }
+      if (node.level > 1) return resolve([])
+      resolve(this.treedata)
+    }
   }
 }
 </script>
