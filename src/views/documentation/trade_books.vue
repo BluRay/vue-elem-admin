@@ -2,17 +2,17 @@
   <el-container>
     <el-header>
       <span class="vxe-form vxe-form--item-title-label">关键字:</span>
-        <vxe-input
-          v-model="searchForm.keyword"
-          clearable
-          size="mini"
-          placeholder="请输入交易账户/名称/资金账户"
-          style="width: 250px;"
-          class="filter-item"
-        />
+      <vxe-input
+        v-model="searchForm.keyword"
+        clearable
+        size="mini"
+        placeholder="请输入交易账户/名称/资金账户"
+        style="width: 250px;"
+        class="filter-item"
+      />
       <span class="vxe-form vxe-form--item-title-label">状 态:</span>
       <vxe-select v-model="searchForm.status" transfer>
-        <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+        <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
       </vxe-select>&nbsp;&nbsp;
       <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
       <vxe-button size="mini" status="success" @click="showModel = true">新增</vxe-button>&nbsp;&nbsp;
@@ -37,8 +37,8 @@
         <vxe-table-column field="memo" title="备注" width="90px" />
         <vxe-table-column title="操作" width="200">
           <template #default="{ row }">
-            <vxe-button status="warning" content="编辑" @click="updateRowEvent(row)"></vxe-button>
-            <vxe-button status="danger" content="删除" @click="deleteRowEvent(row)"></vxe-button>
+            <vxe-button status="warning" content="编辑" @click="updateRowEvent(row)" />
+            <vxe-button status="danger" content="删除" @click="deleteRowEvent(row)" />
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -49,27 +49,27 @@
           <td width="20%"><span class="vxe-form vxe-form--item-title-label">交 易 所:</span></td>
           <td width="30%">
             <vxe-select v-model="book.exchange_id" :transfer="true">
-              <vxe-option v-for="item in exchangeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              <vxe-option v-for="item in exchangeList" :key="item.value" :value="item.value" :label="item.label" />
             </vxe-select>
           </td>
           <td width="20%"><span class="vxe-form vxe-form--item-title-label">状 态:</span></td>
           <td width="30%">
             <vxe-select v-model="book.status" transfer>
-              <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+              <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
             </vxe-select>
           </td>
         </tr>
         <tr>
           <td><span class="vxe-form vxe-form--item-title-label">合约编号:</span></td>
-          <td><vxe-input v-model="book.book_id" placeholder="请输入合约编号"></vxe-input></td>
+          <td><vxe-input v-model="book.book_id" placeholder="请输入合约编号" /></td>
           <td><span class="vxe-form vxe-form--item-title-label">交易品种:</span></td>
-          <td><vxe-input v-model="book.book_name" placeholder="请输入交易品种"></vxe-input></td>
+          <td><vxe-input v-model="book.book_name" placeholder="请输入交易品种" /></td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
+          <td />
+          <td />
           <td><vxe-button size="mini" status="primary" @click="fetchData()">确认</vxe-button></td>
-          <td></td>
+          <td />
         </tr>
       </table>
     </vxe-modal>
@@ -90,13 +90,13 @@ export default {
 	    pageSizes: [100, 500, 1000, 5000],
       tableData: [],
       exchangeList: [
-        {label:'上海期货交易所',value:'SHFE'},
-        {label:'郑州商品交易所',value:'CZCE'},
-        {label:'大连商品交易所',value:'DCE'},
-        {label:'中国金融期货交易所',value:'CFFEX'},
-        {label:'广州期货交易所',value:'GFEX'}
+        { label: '上海期货交易所', value: 'SHFE' },
+        { label: '郑州商品交易所', value: 'CZCE' },
+        { label: '大连商品交易所', value: 'DCE' },
+        { label: '中国金融期货交易所', value: 'CFFEX' },
+        { label: '广州期货交易所', value: 'GFEX' }
       ],
-      statusList: [{'label':'启用交易','value':'1'},{'label':'停止交易','value':'0'}],
+      statusList: [{ 'label': '启用交易', 'value': '1' }, { 'label': '停止交易', 'value': '0' }],
       book: {}
     }
   },
@@ -116,10 +116,9 @@ export default {
     },
     deleteRowEvent(row) {
       this.searchForm.status = '1'
-	    if(confirm("确认要删除吗?")) {
+	    if (confirm('确认要删除吗?')) {
 	    	this.$message({ message: '删除成功!', type: 'success' })
 	    }
-
     },
     exportDataEvent() {
       this.$refs.xTable.exportData({
