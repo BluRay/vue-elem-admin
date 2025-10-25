@@ -1,26 +1,23 @@
 <template>
   <el-container>
     <el-header>
-      <vxe-form refs="grid_form">
-        <vxe-form-item title="关键字:" title-width="80px">
-          <template #default>
-            <vxe-input
-              v-model="searchForm.keyword"
-              clearable
-              size="mini"
-              placeholder="请输入交易账户/名称/资金账户"
-              style="width: 250px;"
-              class="filter-item"
-            />
-          </template>
-        </vxe-form-item>
-        <vxe-form-item>
-          <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
-          <vxe-button size="mini" status="success" @click="showModel = true">新增</vxe-button>
-        </vxe-form-item>
-      </vxe-form> &nbsp;&nbsp;
+      <span class="vxe-form vxe-form--item-title-label">关键字:</span>
+        <vxe-input
+          v-model="searchForm.keyword"
+          clearable
+          size="mini"
+          placeholder="请输入交易账户/名称/资金账户"
+          style="width: 250px;"
+          class="filter-item"
+        />
+      <span class="vxe-form vxe-form--item-title-label">状 态:</span>
+      <vxe-select v-model="searchForm.status" transfer>
+        <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+      </vxe-select>&nbsp;&nbsp;
+      <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
+      <vxe-button size="mini" status="success" @click="showModel = true">新增</vxe-button>&nbsp;&nbsp;
     </el-header>
-    <el-main style="padding: 20px 20px 0px 20px;">
+    <el-main style="padding: 10px 10px 0px 10px;">
       <vxe-table
         ref="xTable"
         border
@@ -46,28 +43,35 @@
         </vxe-table-column>
       </vxe-table>
     </el-main>
-    <vxe-modal v-model="showModel" title="新增交易品种" size="mini" width="500" show-footer>
-      <template #default>
-      <vxe-form refs="add_form">
-        <vxe-form-item field="flag1" title="合约编号:" title-width="70px" :span="12" :item-render="{}">
-          <vxe-input v-model="book.book_id" placeholder="请输入合约编号"></vxe-input>
-        </vxe-form-item>
-        <vxe-form-item field="flag1" title="交易品种:" title-width="70px" :span="12" :item-render="{}">
-          <vxe-input v-model="book.book_name" placeholder="请输入交易品种"></vxe-input>
-        </vxe-form-item>
-        <vxe-form-item field="flag1" title="交 易 所:" title-width="70px" :span="12" :item-render="{}">
-          <vxe-select v-model="book.exchange_id" transfer>
-            <vxe-option v-for="item in exchangeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-          </vxe-select>
-        </vxe-form-item>
-        <vxe-form-item align="center" title-align="left" :span="24">
-          <template #default>
-            <vxe-button type="submit">提交</vxe-button>
-            <vxe-button type="reset">重置</vxe-button>
-          </template>
-        </vxe-form-item>
-      </vxe-form>
-      </template>
+    <vxe-modal v-model="showModel" title="新增交易品种" size="mini" width="540" show-footer>
+      <table width="100%">
+        <tr>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交 易 所:</span></td>
+          <td width="30%">
+            <vxe-select v-model="book.exchange_id" :transfer="true">
+              <vxe-option v-for="item in exchangeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+            </vxe-select>
+          </td>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">状 态:</span></td>
+          <td width="30%">
+            <vxe-select v-model="book.status" transfer>
+              <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+            </vxe-select>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="vxe-form vxe-form--item-title-label">合约编号:</span></td>
+          <td><vxe-input v-model="book.book_id" placeholder="请输入合约编号"></vxe-input></td>
+          <td><span class="vxe-form vxe-form--item-title-label">交易品种:</span></td>
+          <td><vxe-input v-model="book.book_name" placeholder="请输入交易品种"></vxe-input></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><vxe-button size="mini" status="primary" @click="fetchData()">确认</vxe-button></td>
+          <td></td>
+        </tr>
+      </table>
     </vxe-modal>
   </el-container>
 </template>
@@ -79,13 +83,20 @@ export default {
   name: 'TradBooks',
   data() {
     return {
-    	searchForm: { keyword: '', date: '' },
+    	searchForm: { keyword: '', status: '1' },
       showModel: false,
       loading: false,
       tableheight: '500px',
 	    pageSizes: [100, 500, 1000, 5000],
       tableData: [],
-      exchangeList: [{label:'上期所',value:'AAA'},{label:'bbb',value:'bbb'}],
+      exchangeList: [
+        {label:'上海期货交易所',value:'SHFE'},
+        {label:'郑州商品交易所',value:'CZCE'},
+        {label:'大连商品交易所',value:'DCE'},
+        {label:'中国金融期货交易所',value:'CFFEX'},
+        {label:'广州期货交易所',value:'GFEX'}
+      ],
+      statusList: [{'label':'启用交易','value':'1'},{'label':'停止交易','value':'0'}],
       book: {}
     }
   },
@@ -104,6 +115,7 @@ export default {
       })
     },
     deleteRowEvent(row) {
+      this.searchForm.status = '1'
 	    if(confirm("确认要删除吗?")) {
 	    	this.$message({ message: '删除成功!', type: 'success' })
 	    }
