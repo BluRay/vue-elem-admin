@@ -9,13 +9,13 @@
         placeholder="请输入交易账户/名称/资金账户"
         style="width: 250px;"
         class="filter-item"
-      />
+      />&nbsp;&nbsp;
       <span class="vxe-form vxe-form--item-title-label">状 态:</span>
       <vxe-select v-model="searchForm.status" transfer>
         <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
       </vxe-select>&nbsp;&nbsp;
       <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
-      <vxe-button size="mini" status="success" @click="showModel = true">新增</vxe-button>&nbsp;&nbsp;
+      <vxe-button size="mini" status="success" @click="book = {};modelTitle = '新增交易品种';showModel = true">新增</vxe-button>&nbsp;&nbsp;
     </el-header>
     <el-main style="padding: 10px 10px 0px 10px;">
       <vxe-table
@@ -43,7 +43,7 @@
         </vxe-table-column>
       </vxe-table>
     </el-main>
-    <vxe-modal v-model="showModel" title="新增交易品种" size="mini" width="540" show-footer>
+    <vxe-modal v-model="showModel" :title="modelTitle" size="mini" width="540" show-footer>
       <table width="100%">
         <tr>
           <td width="20%"><span class="vxe-form vxe-form--item-title-label">交 易 所:</span></td>
@@ -68,7 +68,7 @@
         <tr>
           <td />
           <td />
-          <td><vxe-button size="mini" status="primary" @click="fetchData()">确认</vxe-button></td>
+          <td><vxe-button size="mini" status="primary" @click="updateConfirmData()">确认</vxe-button></td>
           <td />
         </tr>
       </table>
@@ -87,6 +87,7 @@ export default {
       showModel: false,
       loading: false,
       tableheight: '500px',
+      modelTitle: '新增交易品种',
 	    pageSizes: [100, 500, 1000, 5000],
       tableData: [],
       exchangeList: [
@@ -113,6 +114,14 @@ export default {
         this.tableData = response.data.result.data.dateList
         this.loading = false
       })
+    },
+    updateRowEvent(row) {
+      this.modelTitle = '编辑交易品种'
+      this.book = row
+      this.showModel = true
+    },
+    updateConfirmData() {
+      console.log(this.book)
     },
     deleteRowEvent(row) {
       this.searchForm.status = '1'
