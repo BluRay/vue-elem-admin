@@ -41,6 +41,7 @@ module.exports = {
       [process.env.VUE_APP_BASE_API]: {
         target: `http://127.0.0.1:8082`,
         //target: `http://192.168.1.200:8082`,
+        //target: `http://8.152.163.239:8096`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '/think'

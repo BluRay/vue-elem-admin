@@ -108,60 +108,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/tradconf',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: '交易系统',
-      icon: 'el-icon-s-help'
-    },
-    children: [
-      {
-        path: 'trade_main',
-        component: () => import('@/views/documentation/trade_main'),
-        name: 'Documentation',
-        meta: { title: '交易主界面', icon: 'el-icon-s-marketing', affix: false }
-      },
-      {
-        path: 'trade_account',
-        component: () => import('@/views/documentation/trade_account'),
-        name: 'Documentation',
-        meta: { title: '交易帐户配置', icon: 'el-icon-s-custom', affix: false }
-      },
-      {
-        path: 'trade_books',
-        component: () => import('@/views/documentation/trade_books'),
-        name: 'Documentation',
-        meta: { title: '交易品种配置', icon: 'el-icon-s-goods', affix: false }
-      }
-    ]
-  },
-  {
-    path: '/config',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: '系统设置',
-      icon: 'el-icon-s-help'
-    },
-    children: [
-      {
-        path: 'account',
-        component: () => import('@/views/documentation/tradedetail'),
-        name: 'Documentation',
-        meta: { title: '用户管理', icon: 'el-icon-s-tools', affix: false }
-      },
-      {
-        path: 'tradedetail',
-        component: () => import('@/views/documentation/tradedetail'),
-        name: 'Documentation',
-        meta: { title: '权限管理', icon: 'el-icon-s-tools', affix: false }
-      }
-    ]
-  },
-  {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
@@ -196,7 +142,79 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  /** {
+  {
+    path: '/tradconf',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '交易系统',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'trade_main',
+        component: () => import('@/views/documentation/trade_main'),
+        name: 'MainTradePage',
+        meta: { title: '交易主界面', requiresAuth: true, roles: ['交易员'], icon: 'el-icon-s-marketing', affix: false }
+      },
+      {
+        path: 'trade_main',
+        component: () => import('@/views/documentation/trade_main'),
+        name: 'MainTradePage',
+        meta: { title: '跟单交易界面', requiresAuth: true, roles: ['跟单员'], icon: 'el-icon-guide', affix: false }
+      },
+      {
+        path: 'trade_account',
+        component: () => import('@/views/documentation/trade_account'),
+        name: 'Documentation',
+        meta: { title: '交易帐户配置', requiresAuth: true, icon: 'el-icon-s-custom', affix: false }
+      },
+      {
+        path: 'trade_books',
+        component: () => import('@/views/documentation/trade_books'),
+        name: 'Documentation',
+        meta: { title: '交易品种配置', icon: 'el-icon-s-goods', affix: false }
+      },
+      {
+        path: 'tactics_conf',
+        component: () => import('@/views/documentation/tactics_conf'),
+        name: 'Documentation',
+        meta: { title: '交易策略配置', icon: 'el-icon-cpu', affix: false }
+      },
+      {
+        path: 'trade_books',
+        component: () => import('@/views/documentation/trade_books'),
+        name: 'Documentation',
+        meta: { title: '交易跟单配置', icon: 'el-icon-connection', affix: false }
+      },
+    ]
+  },
+  {
+    path: '/config',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '系统设置',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'account',
+        component: () => import('@/views/documentation/tradedetail'),
+        name: 'Documentation',
+        meta: { title: '用户管理', icon: 'el-icon-s-tools', affix: false }
+      },
+      {
+        path: 'tradedetail',
+        component: () => import('@/views/documentation/tradedetail'),
+        name: 'Documentation',
+        meta: { title: '权限管理', icon: 'el-icon-s-tools', affix: false }
+      }
+    ]
+  },
+  /**{
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
@@ -205,7 +223,7 @@ export const asyncRoutes = [
     meta: {
       title: 'Permission',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
@@ -214,7 +232,7 @@ export const asyncRoutes = [
         name: 'PagePermission',
         meta: {
           title: 'Page Permission',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['follower'] // or you can only set roles in sub nav
         }
       },
       {
