@@ -15,7 +15,7 @@
         <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
       </vxe-select>&nbsp;&nbsp;
       <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
-      <vxe-button size="mini" status="success" @click="book = {};modelTitle = '新增交易品种';showModel = true">新增</vxe-button>&nbsp;&nbsp;
+      <vxe-button size="mini" status="success" @click="book = {status: '启用交易'};modelTitle = '新增交易品种';showModel = true">新增</vxe-button>&nbsp;&nbsp;
     </el-header>
     <el-main style="padding: 10px 10px 0px 10px;">
       <vxe-table
@@ -78,12 +78,12 @@
 
 <script>
 import Papa from 'papaparse'
-import { getRqTradeBooksData } from '@/api/remote-search'
+import { getRqTradeBooksData, insertTradeBooksData, updateTradeBooksData, deleteTradeBooksData } from '@/api/remote-search'
 export default {
   name: 'TradBooks',
   data() {
     return {
-    	searchForm: { keyword: '', status: '1' },
+    	searchForm: { keyword: '', status: '启用交易' },
       showModel: false,
       loading: false,
       tableheight: '500px',
@@ -97,7 +97,7 @@ export default {
         { label: '中国金融期货交易所', value: 'CFFEX' },
         { label: '广州期货交易所', value: 'GFEX' }
       ],
-      statusList: [{ 'label': '启用交易', 'value': '1' }, { 'label': '停止交易', 'value': '0' }],
+      statusList: [{ 'label': '启用交易', 'value': '启用交易' }, { 'label': '停止交易', 'value': '停止交易' }],
       book: {}
     }
   },
@@ -109,7 +109,8 @@ export default {
     fetchData() {
       this.loading = true
       getRqTradeBooksData({
-      	account_date: this.searchForm.date
+      	keyword: this.searchForm.keyword,
+        status: this.searchForm.status
       }).then(response => {
         this.tableData = response.data.result.data.dateList
         this.loading = false
@@ -122,11 +123,43 @@ export default {
     },
     updateConfirmData() {
       console.log(this.book)
+      this.exchangeList.forEach(e => {
+        if (e.value === this.book.exchange_id) {
+          this.book.exchange_name = e.label
+        }
+      })
+      this.loading = true
+      if ((this.book.id || '') === '') {
+        insertTradeBooksData(this.book).then(response => {
+          this.loading = false
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.showModel = false
+            this.fetchData()
+          } else {
+            this.$message({ message: '操作失败!品种已经存在', type: 'success' })
+          }
+        })
+      } else {
+        updateTradeBooksData(this.book).then(response => {
+          this.loading = false
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.showModel = false
+          }
+        })
+      }
     },
     deleteRowEvent(row) {
-      this.searchForm.status = '1'
 	    if (confirm('确认要删除吗?')) {
-	    	this.$message({ message: '删除成功!', type: 'success' })
+        deleteTradeBooksData(row).then(response => {
+          this.loading = false
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.showModel = false
+            this.fetchData()
+          }
+        })
 	    }
     },
     exportDataEvent() {

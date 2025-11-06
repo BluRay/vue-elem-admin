@@ -43,6 +43,27 @@ export function getRqTradeBooksData(data) {
     data
   })
 }
+export function insertTradeBooksData(data) {
+  return request({
+    url: '/futures/insertTradeBooksData',
+    method: 'POST',
+    data
+  })
+}
+export function updateTradeBooksData(data) {
+  return request({
+    url: '/futures/updateTradeBooksData',
+    method: 'POST',
+    data
+  })
+}
+export function deleteTradeBooksData(data) {
+  return request({
+    url: '/futures/deleteTradeBooksData',
+    method: 'POST',
+    data
+  })
+}
 export function getRqTradeAccountData(data) {
   return request({
     url: '/futures/getRqTradeAccountData',
