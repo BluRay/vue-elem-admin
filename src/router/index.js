@@ -159,16 +159,16 @@ export const asyncRoutes = [
         meta: { title: '交易主界面', requiresAuth: true, roles: ['交易员'], icon: 'el-icon-s-marketing', affix: false }
       },
       {
-        path: 'trade_main',
-        component: () => import('@/views/documentation/trade_main'),
+        path: 'trade_follow',
+        component: () => import('@/views/documentation/trade_follow'),
         name: 'MainTradePage',
         meta: { title: '跟单交易界面', requiresAuth: true, roles: ['跟单员'], icon: 'el-icon-guide', affix: false }
       },
       {
-        path: 'trade_account',
-        component: () => import('@/views/documentation/trade_account'),
+        path: 'trade_follow_conf',
+        component: () => import('@/views/documentation/trade_follow_conf'),
         name: 'Documentation',
-        meta: { title: '交易帐户配置', requiresAuth: true, icon: 'el-icon-s-custom', affix: false }
+        meta: { title: '交易跟单配置', icon: 'el-icon-connection', affix: false }
       },
       {
         path: 'trade_books',
@@ -177,16 +177,16 @@ export const asyncRoutes = [
         meta: { title: '交易品种配置', icon: 'el-icon-s-goods', affix: false }
       },
       {
+        path: 'trade_account',
+        component: () => import('@/views/documentation/trade_account'),
+        name: 'Documentation',
+        meta: { title: '交易帐户配置', requiresAuth: true, icon: 'el-icon-s-custom', affix: false }
+      },
+      {
         path: 'tactics_conf',
         component: () => import('@/views/documentation/tactics_conf'),
         name: 'Documentation',
         meta: { title: '交易策略配置', icon: 'el-icon-cpu', affix: false }
-      },
-      {
-        path: 'trade_books',
-        component: () => import('@/views/documentation/trade_books'),
-        name: 'Documentation',
-        meta: { title: '交易跟单配置', icon: 'el-icon-connection', affix: false }
       },
     ]
   },

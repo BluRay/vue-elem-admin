@@ -15,7 +15,7 @@
         <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
       </vxe-select>&nbsp;&nbsp;
       <vxe-button size="mini" status="primary" @click="fetchData()">查询</vxe-button>
-      <vxe-button size="mini" status="success" @click="book = {status: '启用交易'};modelTitle = '新增交易品种';showModel = true">新增</vxe-button>&nbsp;&nbsp;
+      <vxe-button size="mini" status="success" @click="book = {id: '',status: '启用交易'};modelTitle = '新增交易品种';showModel = true">新增</vxe-button>&nbsp;&nbsp;
     </el-header>
     <el-main style="padding: 10px 10px 0px 10px;">
       <vxe-table
@@ -68,8 +68,8 @@
         <tr>
           <td />
           <td />
-          <td><vxe-button size="mini" status="primary" @click="updateConfirmData()">确认</vxe-button></td>
-          <td />
+          <td><vxe-button size="mini" status="primary" @click="updateConfirmData()">保存</vxe-button></td>
+          <td><vxe-button size="mini" v-if="book.id === ''" status="success" @click="addConfirmDataMore()">保存并继续新增</vxe-button></td>
         </tr>
       </table>
     </vxe-modal>
@@ -120,6 +120,24 @@ export default {
       this.modelTitle = '编辑交易品种'
       this.book = row
       this.showModel = true
+    },
+    addConfirmDataMore() {
+      this.exchangeList.forEach(e => {
+        if (e.value === this.book.exchange_id) {
+          this.book.exchange_name = e.label
+        }
+      })
+      insertTradeBooksData(this.book).then(response => {
+        this.loading = false
+        if (response.data.result === 0) {
+          this.$message({ message: '操作成功!', type: 'success' })
+          // this.showModel = false
+          this.book = {id: '',status: '启用交易'}
+          this.fetchData()
+        } else {
+          this.$message({ message: '操作失败!品种已经存在', type: 'success' })
+        }
+      })
     },
     updateConfirmData() {
       console.log(this.book)

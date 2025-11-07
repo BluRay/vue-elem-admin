@@ -14,24 +14,8 @@
             />
           </template>
         </vxe-form-item>
-        <vxe-form-item title="数据日期:" title-width="80px">
-          <template #default>
-            <vxe-input
-              v-model="searchForm.date"
-              type="date"
-              value-format="yyyyMMdd"
-              label-format="yyyyMMdd"
-              clearable
-              size="mini"
-              placeholder="数据日期"
-              style="width: 120px;"
-              class="filter-item"
-            />
-          </template>
-        </vxe-form-item>
         <vxe-form-item>
           <vxe-button size="mini" status="success" @click="fetchData()">查询交易账号</vxe-button>
-          <vxe-button size="mini" status="warning" @click="showModel = true">导入交易账号</vxe-button>
         </vxe-form-item>
       </vxe-form> &nbsp;&nbsp;
     </el-header>
@@ -45,43 +29,18 @@
         align="center"
         :loading="loading"
         :height="tableheight"
-        :data="tableData.data"
+        :data="tableData"
       >
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
-        <vxe-table-column field="交易账户" title="交易账户" fixed="left" width="95px" sortable />
-        <vxe-table-column field="名称" title="名称" fixed="left" width="95px" />
-        <vxe-table-column field="风险度" title="风险度" width="95px" sortable />
-        <vxe-table-column field="市值权益" title="市值权益" width="110px" sortable />
-        <vxe-table-column field="优先资金" title="优先资金" width="95px" />
-        <vxe-table-column field="劣后资金" title="劣后资金" width="95px" />
-        <vxe-table-column field="安全度" title="安全度" width="95px" sortable />
-        <vxe-table-column field="可用资金" title="可用资金" width="110px" sortable />
-        <vxe-table-column field="平仓盈亏" title="平仓盈亏" width="95px" />
-        <vxe-table-column field="持仓盈亏" title="持仓盈亏" width="95px" />
-        <vxe-table-column field="保证金" title="保证金" width="95px" sortable />
-        <vxe-table-column field="手续费" title="手续费" width="95px" sortable />
-        <vxe-table-column field="挂单冻结" title="挂单冻结" width="95px" />
-        <vxe-table-column field="出入金" title="出入金" width="95px" />
-        <vxe-table-column field="当前权益" title="当前权益" width="110px" />
-        <vxe-table-column field="期权市值" title="期权市值" width="95px" />
-        <vxe-table-column field="权利金收支" title="权利金收支" width="95px" />
-        <vxe-table-column field="上日市值权益" title="上日市值权益" width="95px" />
-        <vxe-table-column field="上日权益" title="上日权益" width="95px" />
-        <vxe-table-column field="上日期权市值" title="上日期权市值" width="95px" />
-        <vxe-table-column field="期初投入" title="期初投入" width="95px" />
-        <vxe-table-column field="净值" title="净值" width="95px" sortable />
-        <vxe-table-column field="组别" title="组别" width="95px" />
-        <vxe-table-column field="所属资金账户" title="所属资金账户" width="95px" />
-        <vxe-table-column field="备注" title="备注" width="95px" />
+        <vxe-table-column field="account_id" title="交易账户" fixed="left" width="95px" sortable />
+        <vxe-table-column field="account_password" title="交易密码" width="150px" />
+        <vxe-table-column field="account_name" title="账户名称" width="95px" />
+        <vxe-table-column field="futures_company" title="期货公司" width="95px" />
+        <vxe-table-column field="account_type" title="帐号类型" width="95px" />
+        <vxe-table-column field="account_manager" title="管理员" width="95px" />
+        <vxe-table-column field="status" title="是否启用" width="95px" />
+        <vxe-table-column field="memo" title="备注" width="125px" />
       </vxe-table>
-      <vxe-pager
-        :loading="loading"
-        :current-page="tableData.pageIndex"
-        :page-size="tableData.pageSize"
-        :total="tableData.totalCount"
-        :page-sizes="pageSizes"
-        @page-change="handlePageChange"
-      />
     </el-main>
     <vxe-modal v-model="showModel" title="导入交易帐号" size="mini" width="500" show-footer>
       <template #default>
@@ -94,7 +53,7 @@
 
 <script>
 import Papa from 'papaparse'
-import { getAccountPageList, uploadAccount } from '@/api/remote-search'
+import { getRqTradeAccountData, uploadAccount } from '@/api/remote-search'
 export default {
   name: 'TradAccount',
   data() {
@@ -114,13 +73,13 @@ export default {
   methods: {
     fetchData() {
       this.loading = true
-      getAccountPageList({
+      getRqTradeAccountData({
       	keyword: this.searchForm.keyword,
       	account_date: this.searchForm.date,
         pageSize: this.tableData.pageSize,
         currentPage: this.tableData.currentPage
       }).then(response => {
-        this.tableData = response.data.result
+        this.tableData = response.data.result.data.dateList
         this.loading = false
         this.searchForm.date = response.data.result.data[0].数据日期
       })
