@@ -32,7 +32,7 @@
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
         <vxe-table-column field="book_id" title="合约编号" fixed="left" width="100px" />
         <vxe-table-column field="book_name" title="交易品种" fixed="left" width="100px" />
-        <vxe-table-column field="exchange_name" title="交易所" width="100px" />
+        <vxe-table-column field="exchange_name" title="交易所" width="140px" />
         <vxe-table-column field="status" title="状态" width="90px" />
         <vxe-table-column field="memo" title="备注" width="90px" />
         <vxe-table-column title="操作" width="200">

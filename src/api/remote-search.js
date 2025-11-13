@@ -71,3 +71,32 @@ export function getRqTradeAccountData(data) {
     data
   })
 }
+
+export function getRqTacticsData(data) {
+  return request({
+    url: '/futures/getRqTacticsData',
+    method: 'POST',
+    data
+  })
+}
+export function insertTacticsData(data) {
+  return request({
+    url: '/futures/insertTacticsData',
+    method: 'POST',
+    data
+  })
+}
+export function updateTacticsData(data) {
+  return request({
+    url: '/futures/updateTacticsData',
+    method: 'POST',
+    data
+  })
+}
+export function deleteTacticsData(data) {
+  return request({
+    url: '/futures/deleteTacticsData',
+    method: 'POST',
+    data
+  })
+}
