@@ -32,6 +32,7 @@
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
         <vxe-table-column field="book_id" title="合约编号" fixed="left" width="100px" />
         <vxe-table-column field="book_name" title="交易品种" fixed="left" width="100px" />
+        <vxe-table-column field="price_step" title="最小变动价位" fixed="left" width="100px" />
         <vxe-table-column field="exchange_name" title="交易所" width="140px" />
         <vxe-table-column field="status" title="状态" width="90px" />
         <vxe-table-column field="memo" title="备注" width="90px" />
@@ -66,10 +67,16 @@
           <td><vxe-input v-model="book.book_name" placeholder="请输入交易品种" /></td>
         </tr>
         <tr>
+          <td><span class="vxe-form vxe-form--item-title-label">最小变动价位:</span></td>
+          <td><vxe-input v-model="book.price_step" placeholder="请输入最小变动价位" /></td>
+          <td />
+          <td />
+        </tr>
+        <tr>
           <td />
           <td />
           <td><vxe-button size="mini" status="primary" @click="updateConfirmData()">保存</vxe-button></td>
-          <td><vxe-button size="mini" v-if="book.id === ''" status="success" @click="addConfirmDataMore()">保存并继续新增</vxe-button></td>
+          <td><vxe-button v-if="book.id === ''" size="mini" status="success" @click="addConfirmDataMore()">保存并继续新增</vxe-button></td>
         </tr>
       </table>
     </vxe-modal>
@@ -132,7 +139,7 @@ export default {
         if (response.data.result === 0) {
           this.$message({ message: '操作成功!', type: 'success' })
           // this.showModel = false
-          this.book = {id: '',status: '启用交易'}
+          this.book = { id: '', status: '启用交易' }
           this.fetchData()
         } else {
           this.$message({ message: '操作失败!品种已经存在', type: 'success' })
