@@ -100,3 +100,32 @@ export function deleteTacticsData(data) {
     data
   })
 }
+
+export function getFollowUserData(data) {
+  return request({
+    url: '/futures/getFollowUserData',
+    method: 'POST',
+    data
+  })
+}
+export function insertFollowUserData(data) {
+  return request({
+    url: '/futures/insertFollowUserData',
+    method: 'POST',
+    data
+  })
+}
+export function updateFollowUserData(data) {
+  return request({
+    url: '/futures/updateFollowUserData',
+    method: 'POST',
+    data
+  })
+}
+export function deleteFollowUserData(data) {
+  return request({
+    url: '/futures/deleteFollowUserData',
+    method: 'POST',
+    data
+  })
+}

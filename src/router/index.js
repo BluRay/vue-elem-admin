@@ -162,13 +162,13 @@ export const asyncRoutes = [
         path: 'trade_follow',
         component: () => import('@/views/documentation/trade_follow'),
         name: 'MainTradePage',
-        meta: { title: '跟单交易界面', requiresAuth: true, roles: ['跟单员'], icon: 'el-icon-guide', affix: false }
+        meta: { title: '跟单管理界面', requiresAuth: true, roles: ['跟单员'], icon: 'el-icon-guide', affix: false }
       },
       {
         path: 'trade_follow_conf',
         component: () => import('@/views/documentation/trade_follow_conf'),
         name: 'Documentation',
-        meta: { title: '交易跟单配置', icon: 'el-icon-connection', affix: false }
+        meta: { title: '跟单帐号配置', icon: 'el-icon-connection', affix: false }
       },
       {
         path: 'trade_books',
