@@ -16,6 +16,7 @@
             &nbsp;&nbsp;<span class="t_memo">风险提示:</span><br/>
             &nbsp;&nbsp;<span><b>{{item.tactics_rick}}</b></span><br/>
             &nbsp;&nbsp;<span class="t_memo">适用品种:</span>&nbsp;&nbsp;<span><b>{{item.tactics_bookid}}</b></span><br/><br/>
+            &nbsp;&nbsp;<span class="t_memo">交易帐号:</span>&nbsp;&nbsp;<span><b>{{item.tactics_account}}【{{item.tactics_company}}】</b></span><br/><br/>
             <vxe-button size="mini" status="success" @click="edit_tactics(item)" >编辑</vxe-button>
             <vxe-button size="mini" status="warning" @click="del_tactics(item)">删除</vxe-button>
             <vxe-button size="mini" disabled status="primary" >详情</vxe-button>
@@ -54,8 +55,10 @@
           <td width="30%">
             <vxe-input v-model="tactics.tactics_bookid" placeholder="请输入交易品种" />
           </td>
-          <td />
-          <td />
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">所属公司:</span></td>
+          <td width="30%">
+            <vxe-input v-model="tactics.tactics_company" placeholder="请输入所属公司" />
+          </td>
         </tr>
         <tr>
           <td width="20%"><span class="vxe-form vxe-form--item-title-label">描述信息:</span></td>
