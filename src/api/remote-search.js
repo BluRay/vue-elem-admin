@@ -71,6 +71,27 @@ export function getRqTradeAccountData(data) {
     data
   })
 }
+export function insertTradeAccountData(data) {
+  return request({
+    url: '/futures/insertTradeAccountData',
+    method: 'POST',
+    data
+  })
+}
+export function updateTradeAccountData(data) {
+  return request({
+    url: '/futures/updateTradeAccountData',
+    method: 'POST',
+    data
+  })
+}
+export function deleteTradeAccountData(data) {
+  return request({
+    url: '/futures/deleteTradeAccountData',
+    method: 'POST',
+    data
+  })
+}
 
 export function getRqTacticsData(data) {
   return request({

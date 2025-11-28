@@ -15,7 +15,8 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <vxe-button size="mini" status="success" @click="fetchData()">查询交易账号</vxe-button>
+          <vxe-button size="mini" status="primary" @click="fetchData()">查询交易账号</vxe-button>
+          <vxe-button size="mini" status="success" @click="addTradeUser()">新增交易账号</vxe-button>
         </vxe-form-item>
       </vxe-form> &nbsp;&nbsp;
     </el-header>
@@ -38,22 +39,59 @@
         <vxe-table-column field="futures_company" title="期货公司" width="95px" />
         <vxe-table-column field="account_type" title="帐号类型" width="95px" />
         <vxe-table-column field="account_manager" title="管理员" width="95px" />
-        <vxe-table-column field="status" title="是否启用" width="95px" />
         <vxe-table-column field="memo" title="备注" width="125px" />
+        <vxe-table-column title="操作" fixed="right" width="140">
+          <template #default="{ row }">
+            <vxe-button status="primary" size="mini" content="编辑" @click="updateRowEvent(row)" />
+            <vxe-button status="danger" size="mini" content="删除" @click="deleteRowEvent(row)" />
+          </template>
+        </vxe-table-column>
       </vxe-table>
     </el-main>
-    <vxe-modal v-model="showModel" title="导入交易帐号" size="mini" width="500" show-footer>
+    <vxe-modal v-model="showImportModel" title="导入交易帐号" size="mini" width="500" show-footer>
       <template #default>
         <input id="files" ref="refFile" type="file" @change="importCsv">
         <p>导入csv文件标题格式为[交易账户_日期.csv] 如:交易账户_20251018.csv</p>
       </template>
+    </vxe-modal>
+    <vxe-modal v-model="showModel" :title="modelTitle" size="mini" width="540" show-footer>
+      <table width="100%">
+        <tr>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交易帐号:</span></td>
+          <td width="30%"><vxe-input v-model="user.account_id" placeholder="请输入交易帐号" /></td>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交易密码:</span></td>
+          <td width="30%"><vxe-input v-model="user.account_password" placeholder="请输入交易密码" /></td>
+        </tr>
+        <tr>
+          <td><span class="vxe-form vxe-form--item-title-label">帐户姓名:</span></td>
+          <td><vxe-input v-model="user.account_name" placeholder="请输入帐户姓名" /></td>
+          <td><span class="vxe-form vxe-form--item-title-label">管理人员:</span></td>
+          <td><vxe-input v-model="user.account_manager" placeholder="请输入管理人姓名" /></td>
+        </tr>
+        <tr>
+          <td><span class="vxe-form vxe-form--item-title-label">期货公司:</span></td>
+          <td><vxe-input v-model="user.futures_company" placeholder="请输入期货公司" /></td>
+          <td><span class="vxe-form vxe-form--item-title-label">账号类型:</span></td>
+          <td>
+            <vxe-select v-model="user.account_type" transfer>
+              <vxe-option v-for="item in statusList" :key="item.value" :value="item.value" :label="item.label" />
+            </vxe-select>
+          </td>
+        </tr>
+        <tr>
+          <td />
+          <td />
+          <td><vxe-button size="mini" status="primary" @click="updateConfirmData()">保存</vxe-button></td>
+          <td><vxe-button v-if="user.id === ''" size="mini" status="success" @click="addConfirmDataMore()">保存并继续新增</vxe-button></td>
+        </tr>
+      </table>
     </vxe-modal>
   </el-container>
 </template>
 
 <script>
 import Papa from 'papaparse'
-import { getRqTradeAccountData, uploadAccount } from '@/api/remote-search'
+import { getRqTradeAccountData, insertTradeAccountData, updateTradeAccountData, deleteTradeAccountData, uploadAccount } from '@/api/remote-search'
 export default {
   name: 'TradAccount',
   data() {
@@ -62,6 +100,9 @@ export default {
       showModel: false,
       loading: false,
       tableheight: '500px',
+      user: {},
+      modelTitle: '新增交易用户',
+      statusList: [{ 'label': '测试', 'value': '测试' }, { 'label': '实盘', 'value': '实盘' }],
 	    pageSizes: [100, 500, 1000, 5000],
       tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 }
     }
@@ -90,6 +131,60 @@ export default {
       this.tableData.pageSize = pageSize
       console.log('-->this.tableData.currentPage:' + this.tableData.currentPage)
       this.fetchData()
+    },
+    addTradeUser() {
+      this.user = { id: '', account_type: '测试', status: '0'}
+      this.showModel = true
+    },
+    addConfirmDataMore() {
+      insertTradeAccountData(this.user).then(response => {
+        this.loading = false
+        if (response.data.result === 0) {
+          this.$message({ message: '操作成功!', type: 'success' })
+          this.user = { id: '', account_type: '测试', status: '0' }
+          this.fetchData()
+        } else {
+          this.$message({ message: '操作失败!', type: 'error' })
+        }
+      })
+    },
+    updateRowEvent(row) {
+      this.user = row
+      this.showModel = true
+    },
+    updateConfirmData() {
+      if ((this.user.id || '') === '') {
+        insertTradeAccountData(this.user).then(response => {
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.user = { id: '', account_type: '测试', status: '0' }
+            this.showModel = false
+            this.fetchData()
+          } else {
+            this.$message({ message: '操作失败!', type: 'error' })
+          }
+        })
+      } else {
+        updateTradeAccountData(this.user).then(response => {
+          this.loading = false
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.fetchData()
+            this.showModel = false
+          }
+        })
+      }
+    },
+    deleteRowEvent(row) {
+      if (confirm('确认要删除吗?')) {
+        deleteTradeAccountData(row).then(response => {
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.showModel = false
+            this.fetchData()
+          }
+        })
+      }
     },
     importCsv() {
       let selectedFile = null

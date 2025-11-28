@@ -40,13 +40,13 @@
         <vxe-table-column field="phone_number" title="联系电话" width="95px" />
         <vxe-table-column field="address" title="联系地址" width="95px" />
         <vxe-table-column field="status" title="状态" width="95px" />
-        <vxe-table-column field="follow_tactics_1" title="跟单策略1" width="95px" />
-        <vxe-table-column field="follow_tactics_2" title="跟单策略2" width="95px" />
-        <vxe-table-column field="follow_tactics_3" title="跟单策略3" width="95px" />
-        <vxe-table-column field="follow_tactics_4" title="跟单策略4" width="95px" />
-        <vxe-table-column field="follow_tactics_5" title="跟单策略5" width="95px" />
+        <vxe-table-column field="follow_tactics_1" title="跟单策略1" width="125px" :formatter="formatter_tactics" />
+        <vxe-table-column field="follow_tactics_2" title="跟单策略2" width="125px" :formatter="formatter_tactics" />
+        <vxe-table-column field="follow_tactics_3" title="跟单策略3" width="125px" :formatter="formatter_tactics" />
+        <vxe-table-column field="follow_tactics_4" title="跟单策略4" width="125px" :formatter="formatter_tactics" />
+        <vxe-table-column field="follow_tactics_5" title="跟单策略5" width="125px" :formatter="formatter_tactics" />
         <vxe-table-column field="memo" title="备注" width="125px" />
-        <vxe-table-column title="操作" fixed="right" width="200">
+        <vxe-table-column title="操作" fixed="right" width="240">
           <template #default="{ row }">
             <vxe-button status="primary" content="编辑" @click="updateRowEvent(row)" />
             <vxe-button status="warning" content="分配策略" @click="updateTacticsRowEvent(row)" />
@@ -93,10 +93,34 @@
         </tr>
       </table>
     </vxe-modal>
+    <vxe-modal v-model="showTacticsModel" title="分配策略" size="mini" width="600" show-footer>
+      <vxe-table
+        ref="xTable2"
+        border
+        stripe
+        resizable
+        size="mini"
+        align="center"
+        :loading="loading"
+        height="300px"
+        width= "98%""
+        :data="tacticsData"
+      >
+        <vxe-table-column type="checkbox" title="" fixed="left" width="45px" />
+        <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
+        <vxe-table-column field="tactics_name" title="策略名称" width="120px" sortable />
+        <vxe-table-column field="tactics_account" title="交易帐号(样本)" width="120px" />
+        <vxe-table-column field="tactics_bookid" title="交易品种" width="100px" />
+        <vxe-table-column field="tactics_memo" title="策略说明" width="100px" />
+      </vxe-table>
+      <template v-slot:footer>
+        <vxe-button size="mini" status="primary" @click="updateFollowTactics()">保存</vxe-button>
+      </template>
+    </vxe-modal>
   </el-container>
 </template>
 <script>
-import { getFollowUserData, insertFollowUserData } from '@/api/remote-search'
+import { getFollowUserData, insertFollowUserData, updateFollowUserData, deleteFollowUserData, getRqTacticsData} from '@/api/remote-search'
 export default {
   name: 'TacticsConfig',
   components: {},
@@ -105,17 +129,19 @@ export default {
     	searchForm: { keyword: '', date: '' },
       loading: false,
       showModel: false,
+      showTacticsModel: false,
       tableheight: '500px',
       modelTitle: '新增跟单用户',
       user: {},
       statusList: [{ 'label': '正常', 'value': '正常' }, { 'label': '禁用', 'value': '禁用' }],
       pageSizes: [100, 500, 1000, 5000],
-      tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 }
+      tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 },
+      tacticsData: []
     }
   },
   created() {
     this.tableheight = (document.body.clientHeight - 220) + 'px'
-    this.fetchData()
+    this.getRqTacticsData()
   },
   methods: {
     fetchData() {
@@ -128,25 +154,101 @@ export default {
       }).then(response => {
         this.tableData = response.data.result.data.dateList
         this.loading = false
-        this.searchForm.date = response.data.result.data[0].数据日期
+      })
+    },
+    getRqTacticsData() {
+      getRqTacticsData({}).then(res => {
+        this.tacticsData = res.data.result.data.dateList
+        this.fetchData()
       })
     },
     addFollerUser() {
       this.user = { id: '', status: '正常'}
       this.showModel = true
     },
+    updateRowEvent(row) {
+      this.user = row
+      this.showModel = true
+    },
+    updateConfirmData() {
+      if ((this.user.id || '') === '') {
+        insertFollowUserData(this.user).then(response => {
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.user = { id: '', status: '正常' }
+            this.showModel = false
+            this.fetchData()
+          } else {
+            this.$message({ message: '操作失败!', type: 'error' })
+          }
+        })
+      } else {
+        updateFollowUserData(this.user).then(response => {
+          this.loading = false
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.fetchData()
+            this.showModel = false
+          }
+        })
+      }
+    },
     addConfirmDataMore() {
       insertFollowUserData(this.user).then(response => {
         this.loading = false
         if (response.data.result === 0) {
           this.$message({ message: '操作成功!', type: 'success' })
-          this.book = { id: '', status: '正常' }
+          this.user = { id: '', status: '正常' }
           this.fetchData()
         } else {
           this.$message({ message: '操作失败!', type: 'error' })
         }
       })
     },
+    updateTacticsRowEvent(row) {
+      this.user = row
+      this.showTacticsModel = true
+      this.$nextTick(function() {
+        this.$refs.xTable2.clearCheckboxRow()
+      })
+    },
+    deleteRowEvent(row) {
+      if (confirm('确认要删除吗?')) {
+        deleteFollowUserData(row).then(response => {
+          if (response.data.result === 0) {
+            this.$message({ message: '操作成功!', type: 'success' })
+            this.showModel = false
+            this.fetchData()
+          }
+        })
+      }
+    },
+    formatter_tactics({ cellValue }) {
+      let tactics_name = ''
+      this.tacticsData.forEach((item,index)=>{
+        console.log(cellValue + '::' + item.id)
+        if (item.id + '' === cellValue) tactics_name = item.tactics_name
+      })
+      return tactics_name
+    },
+    updateFollowTactics() {
+      let table = this.$refs.xTable2
+      let checked = table.getCheckboxRecords()
+      if(checked.length > 5) {
+        this.$message({ message: '最多分配5条策略!', type: 'error' })
+      }
+      this.user.follow_tactics_1 = ''
+      this.user.follow_tactics_2 = ''
+      this.user.follow_tactics_3 = ''
+      this.user.follow_tactics_4 = ''
+      this.user.follow_tactics_5 = ''
+      checked.forEach((item,index)=>{
+        console.log(index + ':' + item.id)
+        this.user['follow_tactics_' + (index + 1)] = item.id
+      })
+      this.updateConfirmData(this.user)
+      this.showTacticsModel = false
+    }
   }
 }
 </script>
