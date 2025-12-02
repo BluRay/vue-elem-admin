@@ -51,13 +51,19 @@
           </td>
         </tr>
         <tr>
-          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交易品种:</span></td>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交易帐户:</span></td>
           <td width="30%">
-            <vxe-input v-model="tactics.tactics_bookid" placeholder="请输入交易品种" />
+            <vxe-input v-model="tactics.tactics_account" placeholder="请输入交易帐户" />
           </td>
           <td width="20%"><span class="vxe-form vxe-form--item-title-label">所属公司:</span></td>
           <td width="30%">
             <vxe-input v-model="tactics.tactics_company" placeholder="请输入所属公司" />
+          </td>
+        </tr>
+        <tr>
+          <td width="20%"><span class="vxe-form vxe-form--item-title-label">交易品种:</span></td>
+          <td colspan="3">
+            <vxe-input v-model="tactics.tactics_bookid" placeholder="请输入交易品种" />
           </td>
         </tr>
         <tr>
