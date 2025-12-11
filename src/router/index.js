@@ -188,6 +188,12 @@ export const asyncRoutes = [
         name: 'Documentation',
         meta: { title: '交易策略配置', icon: 'el-icon-cpu', affix: false }
       },
+      {
+        path: 'trade_logs',
+        component: () => import('@/views/documentation/trade_logs'),
+        name: 'MainTradePage',
+        meta: { title: '交易日志', icon: 'el-icon-notebook-2', affix: false }
+      },
     ]
   },
   {

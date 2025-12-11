@@ -15,9 +15,7 @@
           </template>
         </vxe-form-item>
         <vxe-form-item>
-          <vxe-button size="mini" status="success" @click="fetchData()">查询</vxe-button>
-          <vxe-button size="mini" status="warning" @click="fetchData()">批量启动</vxe-button>
-          <vxe-button size="mini" status="info" @click="fetchData()">批量停止</vxe-button>
+          <vxe-button size="mini" status="success" @click="fetchData()">查询交易纪录</vxe-button>
         </vxe-form-item>
       </vxe-form> &nbsp;&nbsp;
     </el-header>
@@ -34,25 +32,18 @@
         :data="tableData"
       >
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
-        <vxe-table-column type="checkbox" title="" fixed="left" width="55px" />
         <vxe-table-column field="username" title="跟单账户" fixed="left" width="95px" sortable />
         <vxe-table-column field="display_name" title="账户名称" width="95px" />
-        <vxe-table-column field="display_name" title="所属公司" width="95px" />
         <vxe-table-column field="trade_account" title="交易帐号" width="95px" />
-        <vxe-table-column field="trade_account" title="样本帐号" width="95px" />
         <vxe-table-column field="status" title="交易状态" width="95px" />
         <vxe-table-column field="user_type" title="当前交易品种" width="95px" />
         <vxe-table-column field="user_type" title="当前跟单策略" width="95px" />
         <vxe-table-column field="user_manager" title="持仓" width="95px" />
         <vxe-table-column field="user_manager" title="盈亏" width="95px" />
-        <vxe-table-column field="user_manager" title="明细" width="95px" />
         <vxe-table-column field="memo" title="备注" width="125px" />
-        <vxe-table-column title="操作" fixed="right" width="250">
+        <vxe-table-column title="操作" width="200">
           <template #default="{ row }">
-            <vxe-button status="warning" content="启动" />
-            <vxe-button status="info" content="停止" />
-            <vxe-button status="success" content="全平" />
-            <vxe-button status="primary" content="对齐" />
+            <vxe-button status="warning" content="详情" />
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -69,8 +60,8 @@ export default {
       searchForm: { keyword: '', date: '' },
       loading: false,
       tableheight: '500px',
-      tableData: [{}, {}],
-      pageSizes: [100, 500, 1000, 5000]
+      pageSizes: [100, 500, 1000, 5000],
+      tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 }
     }
   },
   created() {
