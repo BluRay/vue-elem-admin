@@ -16,8 +16,8 @@
         </vxe-form-item>
         <vxe-form-item>
           <vxe-button size="mini" status="success" @click="fetchData()">查询</vxe-button>
-          <vxe-button size="mini" status="warning" @click="fetchData()">批量启动</vxe-button>
-          <vxe-button size="mini" status="info" @click="fetchData()">批量停止</vxe-button>
+          <vxe-button size="mini" status="warning" @click="batch_start()">批量启动</vxe-button>
+          <vxe-button size="mini" status="info" @click="baatch_stop()">批量停止</vxe-button>
         </vxe-form-item>
       </vxe-form> &nbsp;&nbsp;
     </el-header>
@@ -47,10 +47,9 @@
         <vxe-table-column field="user_manager" title="盈亏" width="95px" />
         <vxe-table-column field="user_manager" title="明细" width="95px" />
         <vxe-table-column field="memo" title="备注" width="125px" />
-        <vxe-table-column title="操作" fixed="right" width="250">
+        <vxe-table-column title="操作" fixed="right" width="210">
           <template #default="{ row }">
-            <vxe-button status="warning" content="启动" />
-            <vxe-button status="info" content="停止" />
+            <vxe-button :status="(row.f_status === '0') ? 'warning' : 'info'" :content="(row.f_status === '0') ? '启动' : '停止'" />
             <vxe-button status="success" content="全平" />
             <vxe-button status="primary" content="对齐" />
           </template>
@@ -69,17 +68,28 @@ export default {
       searchForm: { keyword: '', date: '' },
       loading: false,
       tableheight: '500px',
-      tableData: [{}, {}],
+      tableData: [{f_status: '0'}, {f_status: '1'}],
       pageSizes: [100, 500, 1000, 5000]
     }
   },
   created() {
-    this.getconf()
+  },
+  mounted() {
+    //setTimeout(this.main_loop, 1500)
+    setInterval(() => {
+      this.main_loop()
+    }, 1500)
   },
   methods: {
-  	getconf() {
-  		console.log('-->getConf')
-  	}
+  	main_loop() {
+  		console.log('-->main_loop')
+  	},
+    batch_start() {
+
+    },
+    batch_stop() {
+
+    }
   }
 }
 </script>
