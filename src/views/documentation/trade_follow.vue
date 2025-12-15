@@ -59,12 +59,13 @@
   </el-container>
 </template>
 <script>
-import { getConfig } from '@/api/remote-search'
+import { getFollowUserData } from '@/api/remote-search'
 export default {
   name: 'TacticsConfig',
   components: {},
   data() {
     return {
+      main_url: 'http://127.0.0.1:8099',
       searchForm: { keyword: '', date: '' },
       loading: false,
       tableheight: '500px',
@@ -73,6 +74,8 @@ export default {
     }
   },
   created() {
+    this.tableheight = (document.body.clientHeight - 200) + 'px'
+    this.fetchData()
   },
   mounted() {
     //setTimeout(this.main_loop, 1500)
@@ -81,11 +84,26 @@ export default {
     }, 1500)
   },
   methods: {
+    fetchData() {
+      this.loading = true
+      getFollowUserData({
+        keyword: this.searchForm.keyword
+      }).then(response => {
+        this.tableData = response.data.result.data.dateList
+        this.tableData.forEach(item => {
+          item.f_status = '0'
+        })
+        this.loading = false
+      })
+    },
   	main_loop() {
   		console.log('-->main_loop')
   	},
     batch_start() {
-
+      var httpRequest = new XMLHttpRequest();
+      httpRequest.open('GET', this.main_url + '/get_today_order?account=238024' , true)
+      httpRequest.timeout = 2000;
+      httpRequest.send();
     },
     batch_stop() {
 
