@@ -34,12 +34,19 @@
       >
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
         <vxe-table-column field="account_id" title="交易账户" fixed="left" width="95px" sortable />
-        <vxe-table-column field="account_password" title="交易密码" width="150px" />
-        <vxe-table-column field="account_name" title="账户名称" width="95px" />
-        <vxe-table-column field="futures_company" title="期货公司" width="95px" />
-        <vxe-table-column field="account_type" title="帐号类型" width="95px" />
-        <vxe-table-column field="account_manager" title="管理员" width="95px" />
-        <vxe-table-column field="memo" title="备注" width="125px" />
+        <vxe-table-column field="account_password" title="交易密码" width="130px" />
+        <vxe-table-column field="account_name" title="账户名称" width="90px" />
+        <vxe-table-column field="futures_company" title="期货公司" width="90px" />
+        <vxe-table-column field="account_type" title="帐号类型" width="90px" />
+        <vxe-table-column field="CloseProfit" title="平仓盈亏" width="90px" />
+        <vxe-table-column field="PositionProfit" title="持仓盈亏" width="90px" />
+        <vxe-table-column field="CloseProfit" title="平仓盈亏" width="90px" />
+        <vxe-table-column field="Commission" title="手续费" width="90px" />
+        <vxe-table-column field="Available" title="可用资金" width="90px" />
+        <vxe-table-column field="CurrMargin" title="保证金总额" width="90px" />
+        <vxe-table-column field="account_manager" title="管理员" width="90px" />
+        <vxe-table-column field="update_time" title="更新时间" width="140px" />
+        <vxe-table-column field="memo" title="备注" width="100px" />
         <vxe-table-column title="操作" fixed="right" width="140">
           <template #default="{ row }">
             <vxe-button status="primary" size="mini" content="编辑" @click="updateRowEvent(row)" />
@@ -48,12 +55,6 @@
         </vxe-table-column>
       </vxe-table>
     </el-main>
-    <vxe-modal v-model="showImportModel" title="导入交易帐号" size="mini" width="500" show-footer>
-      <template #default>
-        <input id="files" ref="refFile" type="file" @change="importCsv">
-        <p>导入csv文件标题格式为[交易账户_日期.csv] 如:交易账户_20251018.csv</p>
-      </template>
-    </vxe-modal>
     <vxe-modal v-model="showModel" :title="modelTitle" size="mini" width="540" show-footer>
       <table width="100%">
         <tr>
