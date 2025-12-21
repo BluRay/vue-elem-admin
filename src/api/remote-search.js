@@ -122,6 +122,13 @@ export function deleteTacticsData(data) {
   })
 }
 
+export function getFollowUserTradeData(data) {
+  return request({
+    url: '/futures/getFollowUserTradeData',
+    method: 'POST',
+    data
+  })
+}
 export function getFollowUserData(data) {
   return request({
     url: '/futures/getFollowUserData',

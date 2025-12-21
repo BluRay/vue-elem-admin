@@ -32,6 +32,7 @@
         :loading="loading"
         :height="tableheight"
         :data="tableData"
+        :row-style="tableRowClassName"
       >
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
         <vxe-table-column type="checkbox" title="" fixed="left" width="55px" />
@@ -39,19 +40,21 @@
         <vxe-table-column field="display_name" title="账户名称" width="95px" />
         <vxe-table-column field="display_name" title="所属公司" width="95px" />
         <vxe-table-column field="trade_account" title="交易帐号" width="95px" />
-        <vxe-table-column field="trade_account" title="样本帐号" width="95px" />
-        <vxe-table-column field="status" title="交易状态" width="95px" />
-        <vxe-table-column field="user_type" title="当前交易品种" width="95px" />
-        <vxe-table-column field="user_type" title="当前跟单策略" width="95px" />
-        <vxe-table-column field="user_manager" title="持仓" width="95px" />
-        <vxe-table-column field="user_manager" title="盈亏" width="95px" />
-        <vxe-table-column field="user_manager" title="明细" width="95px" />
+        <vxe-table-column field="tactics_account" title="样本帐号" width="95px" />
+        <vxe-table-column field="f_status" title="交易状态" width="95px" :formatter="formatter_status"/>
+        <vxe-table-column field="tactics_bookid" title="当前交易品种" width="95px" />
+        <vxe-table-column field="tactics_name" title="当前跟单策略" width="95px" />
+        <vxe-table-column field="cc_buy" title="持仓(多)" width="95px" />
+        <vxe-table-column field="cc_sell" title="持仓(空)" width="95px" />
+        <vxe-table-column field="profit_p" title="盈亏(持仓)" width="95px" />
+        <vxe-table-column field="profit_c" title="盈亏(平仓)" width="95px" />
+        <vxe-table-column field="trade_datail" title="交易明细" width="95px" />
         <vxe-table-column field="memo" title="备注" width="125px" />
         <vxe-table-column title="操作" fixed="right" width="210">
           <template #default="{ row }">
-            <vxe-button :status="(row.f_status === '0') ? 'warning' : 'info'" :content="(row.f_status === '0') ? '启动' : '停止'" />
-            <vxe-button status="success" content="全平" />
-            <vxe-button status="primary" content="对齐" />
+            <vxe-button @click="btn_tactics(row)" :status="(row.f_status === '0') ? 'warning' : 'info'" :content="(row.f_status === '0') ? '启动' : '停止'" />
+            <vxe-button status="success" disabled content="全平" />
+            <vxe-button status="primary" disabled content="对齐" />
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -59,7 +62,7 @@
   </el-container>
 </template>
 <script>
-import { getFollowUserData } from '@/api/remote-search'
+import { getFollowUserTradeData } from '@/api/remote-search'
 export default {
   name: 'TacticsConfig',
   components: {},
@@ -86,7 +89,7 @@ export default {
   methods: {
     fetchData() {
       this.loading = true
-      getFollowUserData({
+      getFollowUserTradeData({
         keyword: this.searchForm.keyword
       }).then(response => {
         this.tableData = response.data.result.data.dateList
@@ -107,10 +110,27 @@ export default {
     },
     batch_stop() {
 
+    },
+    btn_tactics(row) {
+      row.f_status = (row.f_status === '0') ? '1' : '0'
+      this.$refs.xTable.loadData(this.tableData)
+    },
+    formatter_status({ cellValue }) {
+      return (cellValue === '1') ? '正在跟单' : '停止跟单'
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (row.f_status === '1') {
+        return { backgroundColor: 'indianred', color: '#ffffff' }
+      } else {
+        return ''
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .el-table .warning-row {
+    background: indianred;
+  }
 </style>
