@@ -17,7 +17,7 @@
         <vxe-form-item>
           <vxe-button size="mini" status="success" @click="fetchData()">查询</vxe-button>
           <vxe-button size="mini" status="warning" @click="batch_start()">批量启动</vxe-button>
-          <vxe-button size="mini" status="info" @click="baatch_stop()">批量停止</vxe-button>
+          <vxe-button size="mini" status="info" @click="batch_stop()">批量停止</vxe-button>
         </vxe-form-item>
       </vxe-form> &nbsp;&nbsp;
     </el-header>
@@ -71,7 +71,9 @@ export default {
       main_url: 'http://127.0.0.1:8099',
       searchForm: { keyword: '', date: '' },
       loading: false,
+      following: false,
       tableheight: '500px',
+      follow: [],
       tableData: [{f_status: '0'}, {f_status: '1'}],
       pageSizes: [100, 500, 1000, 5000]
     }
@@ -83,7 +85,7 @@ export default {
   mounted() {
     //setTimeout(this.main_loop, 1500)
     setInterval(() => {
-      this.main_loop()
+      if (!this.following) this.main_loop()
     }, 1500)
   },
   methods: {
@@ -100,18 +102,49 @@ export default {
       })
     },
   	main_loop() {
-  		console.log('-->main_loop')
+  		console.log('-->main_loop:', this.follow)
+      this.following = true
+      setTimeout(() => {this.following = false}, 5000) // 单次循环最大等待时间
+      console.log('-->main_loop over')
   	},
     batch_start() {
+      this.$message({ message: '开发中!', type: 'error' })
       var httpRequest = new XMLHttpRequest();
       httpRequest.open('GET', this.main_url + '/get_today_order?account=238024' , true)
       httpRequest.timeout = 2000;
       httpRequest.send();
     },
     batch_stop() {
-
+      this.$message({ message: '开发中!', type: 'error' })
     },
     btn_tactics(row) {
+      if (row.f_status === '0') { // 启动
+        let check = true
+        this.follow.forEach(f => {
+          if (f.tactics_account === row.tactics_account) {
+            f.trade_account.push(row.trade_account)
+            check = false
+          }
+        })
+        if (check) {
+          this.follow.push({ tactics_account: row.tactics_account, trade_account: [row.trade_account]})
+        }
+      } else {  // 停止
+        this.follow.forEach(f => {
+          if (f.tactics_account === row.tactics_account) {
+            f.trade_account.forEach((item, index) => {
+              if (item === row.trade_account) {
+                f.trade_account.splice(index, 1)
+              }
+            })
+          }
+        })
+        this.follow.forEach((item, index) => {
+          if (item.trade_account.length === 0) {
+            this.follow.splice(index, 1)
+          }
+        })
+      }
       row.f_status = (row.f_status === '0') ? '1' : '0'
       this.$refs.xTable.loadData(this.tableData)
     },
