@@ -79,7 +79,7 @@ export default {
     }
   },
   created() {
-    this.tableheight = (document.body.clientHeight - 200) + 'px'
+    this.tableheight = (document.body.clientHeight - 240) + 'px'
     this.fetchData()
   },
   mounted() {

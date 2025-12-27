@@ -129,6 +129,13 @@ export function getFollowUserTradeData(data) {
     data
   })
 }
+export function getTradeHisData(data) {
+  return request({
+    url: '/futures/getTradeHisData',
+    method: 'POST',
+    data
+  })
+}
 export function getFollowUserData(data) {
   return request({
     url: '/futures/getFollowUserData',
