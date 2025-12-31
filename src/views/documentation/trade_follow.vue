@@ -75,6 +75,7 @@ export default {
       tableheight: '500px',
       follow: [],
       f_wt_list: [],
+      followed_order_list: [],
       tableData: [{f_status: '0'}, {f_status: '1'}],
       pageSizes: [100, 500, 1000, 5000]
     }
@@ -144,56 +145,23 @@ export default {
                   let InstrumentID = item.InstrumentID      // 合约代码
                   let Direction = item.Direction            // 买卖方向 （'0' 买，'1' 卖）
                   let CombOffsetFlag = item.CombOffsetFlag  // 组合开平标志 （'0' 开仓，'1' 平仓，'3' 平今等）
-                  let VolumeTraded = item.VolumeTraded * parseInt(tactics.f_tactics_multiplier || '1')      // 成交数量
-                  var httpRequest2 = new XMLHttpRequest();  // 跟单交易请求【TODO】正式使用需调客户本地交易服务地址
+                  let VolumeTraded = item.VolumeTraded      // 成交数量
                   let trade_str = (Direction === '0') ? 'buy' : 'sell'
-                  if ((tactics.f_tactics_way || '正向') === '反向') {
-                    trade_str = ((trade_str === 'buy') ? 'sell' : 'buy')
-                  }
                   trade_str += (CombOffsetFlag === '0') ? 'open' : 'close'
                   if (_this.followed_order_list.indexOf(OrderSysID) < 0) {
                     console.log('-->[Followed]' + _this.real_main_url + '/' + trade_str + '?account=' + _this.account + '&bookid=' + InstrumentID + '&quantity=' + VolumeTraded)
                     _this.followed_order_list.push(OrderSysID)
                     _this.trade_logs.push({id: _this.logindex, logs: _this.c_time + '[自动]' + trade_str + '[' + InstrumentID + '] ' + VolumeTraded + '手' })
                     _this.logindex++
-                    if (CombOffsetFlag !== '0') { // 平仓时 判断当前仓位是否小于平仓数量
+                    if (CombOffsetFlag !== '0') { // TODO 平仓时 判断当前仓位是否小于平仓数量
                       let cur_cc = 0              // 当前仓位
-                      if (trade_str === 'buyclose') {    // buyclose (Direction === '0')
-                        _this.cc_list.forEach(cc => {
-                          if (cc.InstrumentID === InstrumentID && cc.PosiDirection === '3') {
-                            cur_cc = cc.Position
-                          }
-                        })
-                      } else { // sellclose
-                        _this.cc_list.forEach(cc => {
-                          if (cc.InstrumentID === InstrumentID && cc.PosiDirection === '2') {
-                            cur_cc = cc.Position
-                          }
-                        })
-                      }
-                      console.log('平仓时 判断当前仓位是否小于平仓数量 cur_cc:' + cur_cc + ',VolumeTraded=' + VolumeTraded)
-                      if (cur_cc < VolumeTraded) {
-                        VolumeTraded = cur_cc
-                      }
                     }
-
-                    httpRequest2.open('GET', _this.real_main_url + '/' + trade_str + '?account=' + _this.account + '&bookid=' + InstrumentID + '&quantity=' + VolumeTraded + '&tactics=f_' + tactics.f_tactics_id , true)
-                    httpRequest2.timeout = 5000
-                    httpRequest2.send()
-                    httpRequest2.onreadystatechange = function () {
-                      if (httpRequest2.readyState == 4) {
-                        if (httpRequest2.status == 200) {
-                          console.log(httpRequest2.responseText)
-                          if (httpRequest2.responseText === 'success:0'){
-                            _this.$notify({ title: '提示', message: trade_str + ' 交易成功!', duration: 1500 })
-                          } else {
-                            _this.$notify({ title: '提示', message: trade_str + ' 交易失败!!', duration: 1500 })
-                          }
-                        } else {
-                          _this.$notify({ title: '提示', message: trade_str + ' 交易失败!', duration: 1500 })
-                        }
-                      }
-                    }
+                    f.trade_account.forEach(t => {
+                      var httpRequest2 = new XMLHttpRequest();  // 跟单交易请求【TODO】正式使用需调客户本地交易服务地址
+                      httpRequest2.open('GET', _this.main_url + '/' + trade_str + '?account=' + t + '&bookid=' + InstrumentID + '&quantity=' + VolumeTraded , true)
+                      httpRequest2.timeout = 5000
+                      httpRequest2.send()
+                    })
                   }
                 }
               })
