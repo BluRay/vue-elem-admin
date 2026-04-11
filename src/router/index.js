@@ -197,6 +197,30 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/digitalmoney',
+    component: Layout,
+    redirect: '/example/list',
+    name: 'Example',
+    meta: {
+      title: '数字货币',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        path: 'account',
+        component: () => import('@/views/documentation/digitalmoney_account'),
+        name: 'Documentation',
+        meta: { title: '交易帐户', icon: 'el-icon-user', affix: false }
+      },
+      {
+        path: 'btcusdt',
+        component: () => import('@/views/documentation/digitalmoney_btcusdt'),
+        name: 'Documentation',
+        meta: { title: 'BTCUSDT永续', icon: 'el-icon-s-data', affix: false }
+      }
+    ]
+  },
+  {
     path: '/config',
     component: Layout,
     redirect: '/example/list',
