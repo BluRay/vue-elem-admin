@@ -38,7 +38,6 @@
         <vxe-table-column field="account_name" title="账户名称" width="90px" />
         <vxe-table-column field="futures_company" title="期货公司" width="90px" />
         <vxe-table-column field="account_type" title="帐号类型" width="90px" />
-        <vxe-table-column field="CloseProfit" title="平仓盈亏" width="90px" />
         <vxe-table-column field="PositionProfit" title="持仓盈亏" width="90px" />
         <vxe-table-column field="CloseProfit" title="平仓盈亏" width="90px" />
         <vxe-table-column field="Commission" title="手续费" width="90px" />

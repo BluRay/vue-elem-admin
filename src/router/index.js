@@ -217,6 +217,12 @@ export const asyncRoutes = [
         component: () => import('@/views/documentation/digitalmoney_btcusdt'),
         name: 'Documentation',
         meta: { title: 'BTCUSDT永续', icon: 'el-icon-s-data', affix: false }
+      },
+      {
+        path: 'ethusdt',
+        component: () => import('@/views/documentation/digitalmoney_btcusdt'),
+        name: 'Documentation',
+        meta: { title: 'ETHUSDT永续', icon: 'el-icon-s-data', affix: false }
       }
     ]
   },
