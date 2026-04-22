@@ -40,24 +40,25 @@
         :data="tableData"
       >
         <vxe-table-column type="seq" title="序号" fixed="left" width="45px" />
-        <vxe-table-column field="account_id" title="交易账户" fixed="left" width="120px" sortable />
-        <vxe-table-column field="account_password" title="交易所" width="130px" />
-        <vxe-table-column field="account_name" title="余额" width="90px" />
-        <vxe-table-column field="futures_company" title="状态" width="90px" />
+        <vxe-table-column field="account_name" title="交易账号" fixed="left" width="120px" sortable />
+        <vxe-table-column field="account_id" title="帐号ID" fixed="left" width="120px" sortable />
+        <vxe-table-column field="account_exchange" title="交易所" width="100px" />
+        <vxe-table-column field="balance_usdt" title="余额(USDT)" width="90px" />
+        <vxe-table-column field="balance_btc" title="余额(BTC)" width="90px" />
+        <vxe-table-column field="balance_eth" title="余额(ETH)" width="90px" />
+        <vxe-table-column field="accounnt_status" title="状态" width="80px" />
         <vxe-table-column field="account_type" title="帐号类型" width="90px" />
-        <vxe-table-column field="CloseProfit" title="当前持仓" width="90px" />
-        <vxe-table-column field="PositionProfit" title="当前盈亏" width="90px" />
-        <vxe-table-column field="CloseProfit" title="历史持仓" width="90px" />
-        <vxe-table-column field="Commission" title="历史盈亏" width="90px" />
-        <vxe-table-column field="Available" title="可用资金" width="90px" />
-        <vxe-table-column field="CurrMargin" title="保证金总额" width="90px" />
-        <vxe-table-column field="account_manager" title="管理员" width="90px" />
-        <vxe-table-column field="update_time" title="交易明细" width="140px" />
+        <vxe-table-column field="cur_holding" title="当前持仓" width="150px" />
+        <vxe-table-column field="cur_profit" title="当前盈亏" width="90px" />
+        <vxe-table-column field="his_holding" title="历史持仓" width="90px" />
+        <vxe-table-column field="his_profit" title="历史盈亏" width="90px" />
+        <vxe-table-column field="trade_datail" title="交易明细" width="140px" />
+        <vxe-table-column field="trade_manager" title="管理员" width="90px" />
         <vxe-table-column field="memo" title="备注" width="100px" />
         <vxe-table-column title="操作" fixed="right" width="140">
           <template #default="{ row }">
-            <vxe-button status="primary" size="mini" content="编辑" @click="updateRowEvent(row)" />
-            <vxe-button status="danger" size="mini" content="删除" @click="deleteRowEvent(row)" />
+            <vxe-button status="primary" size="mini" content="编辑" />
+            <vxe-button status="danger" size="mini" content="删除" />
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -112,7 +113,23 @@ export default {
       modelTitle: '新增交易用户',
       exchangeList: [{ 'label': 'HTX', 'value': 'HTX' }, { 'label': 'OKX', 'value': 'OKX' }],
 	    pageSizes: [100, 500, 1000, 5000],
-      tableData: { pageIndex: 1, pageSize: 500, totalCount: 0 }
+      tableData: [{
+        "account_name": "13088888888",
+        "account_id": "61915282",
+        "account_exchange": "HTX",
+        "balance_usdt": "1000",
+        "balance_btc": "0",
+        "balance_eth": "0",
+        "accounnt_status": "正常",
+        "account_type": "spot",
+        "cur_holding": "[ethusdt][多][1]",
+        "cur_profit": "100USDT",
+        "his_holding": "查看",
+        "his_profit": "查看",
+        "trade_datail": "查看",
+        "trade_manager": "admin",
+        "memo": "",
+      }]
     }
   },
   created() {
@@ -121,7 +138,7 @@ export default {
   },
   methods: {
     fetchData() {
-      this.loading = true
+      /** this.loading = true
       getRqTradeAccountData({
       	keyword: this.searchForm.keyword,
       	account_date: this.searchForm.date,
@@ -131,7 +148,7 @@ export default {
         this.tableData = response.data.result.data.dateList
         this.loading = false
         this.searchForm.date = response.data.result.data[0].数据日期
-      })
+      }) **/
     },
     handlePageChange({ currentPage, pageSize }) {
       console.log('-->currentPage:' + currentPage)
@@ -141,8 +158,8 @@ export default {
       this.fetchData()
     },
     addTradeUser() {
-      this.user = { id: '', account_type: '测试', status: '0'}
-      this.showModel = true
+      //this.user = { id: '', account_type: '测试', status: '0'}
+      //this.showModel = true
     },
     addConfirmDataMore() {
       insertTradeAccountData(this.user).then(response => {

@@ -70,6 +70,7 @@ export default {
     return {
       main_url: 'http://127.0.0.1:8099',
       searchForm: { keyword: '', date: '' },
+      follow_mode: '0', // 跟单模式 0:查询样本订单 1:订阅Redis交易信号
       loading: false,
       following: false,
       tableheight: '500px',
@@ -81,7 +82,7 @@ export default {
     }
   },
   created() {
-    this.tableheight = (document.body.clientHeight - 240) + 'px'
+    this.tableheight = (document.body.clientHeight - 190) + 'px'
     this.fetchData()
   },
   mounted() {
@@ -168,7 +169,6 @@ export default {
             }
           }
         }
-
       })
       // this.following = false
       console.log('-->main_loop over')
